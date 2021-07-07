@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "extend-language-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/extendLanguage/ExtendLanguageApplicationCustomizer.js",
+          "manifest": "./src/extensions/extendLanguage/ExtendLanguageApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ExtendLanguageApplicationCustomizerStrings": "lib/extensions/extendLanguage/loc/{locale}.js"
+  }
+}

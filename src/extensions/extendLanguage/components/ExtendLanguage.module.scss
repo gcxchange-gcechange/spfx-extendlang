@@ -1,0 +1,148 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+.dropDownHeader {
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(50, 49, 48);
+  background: none transparent;
+  border: 1px solid transparent;
+  height: auto;
+  line-height: 20px;
+  cursor: default;
+  padding: 4px 8px;
+  text-align: left;
+  overflow-x: auto;
+  min-height: 32px;
+  box-sizing: border-box;
+  user-select: none;
+}
+.dropDownItem {
+  outline: transparent;
+  position: relative;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  font-weight: 400;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  display: flex;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 0px 8px;
+  border-radius: 0px;
+  height: 0px;
+  color: rgb(50, 49, 48);
+  align-items: center;
+  width: 100%;
+  min-height: 36px;
+  line-height: 20px;
+  overflow-wrap: break-word;
+  user-select: none;
+  &:hover {
+    background-color: rgb(243, 242, 241);
+  }
+  &:focus {
+    background-color: rgb(243, 242, 241);
+  }
+}
+
+.mobileSeparator {
+  display: block;
+    height: 1px;
+    background-color: rgb(113, 175, 229);
+    position: relative;
+}
+.mobileList {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+.mobileProfileHeader {
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  background: none transparent;
+  border: none;
+  height: 36px;
+  line-height: 36px;
+  cursor: default;
+  padding: 0px 6px;
+  text-align: left;
+  user-select: none;
+}
+.mobileProfileHeaderItem {
+  white-space: nowrap;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+}
+.mobileProfileHeaderLabel {
+  padding: 0 4px 0 30px;
+  vertical-align: middle;
+  display: inline-block;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+
+.overflowHidden {
+  overflow: hidden;
+}
+
+.mobileProfileLink {
+  outline: transparent;
+  position: relative;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(255, 255, 255);
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  height: 36px;
+  line-height: 36px;
+  display: block;
+  cursor: pointer;
+  padding: 0px 1px 0px 1px;
+  text-align: left;
+
+  &:hover {
+    background-color: rgb(113, 175, 229);
+    color: rgb(243, 242, 241);
+  }
+
+  div {
+    white-space: nowrap;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  a {
+    color: #fff;
+    height: 34px;
+    width: 100%;
+    display: block;
+  }
+
+  span {
+
+    padding: 0 4px 0 32px;
+    vertical-align: middle;
+    display: inline-block;
+    flex-grow: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+}
