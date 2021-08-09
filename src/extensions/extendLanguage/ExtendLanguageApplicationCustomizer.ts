@@ -19,7 +19,7 @@ export default class ExtendLanguageApplicationCustomizer
   @override
   public onInit(): Promise<void> {
 
-    if(this.context.pageContext.legacyPageContext.isHubSite || (this.context.pageContext.legacyPageContext.hubSiteId == "688cb2b9-e071-4b25-ad9c-2b0dca2b06ba" || this.context.pageContext.legacyPageContext.hubSiteId == "225a8757-c7f4-4905-9456-7a3a951a87b6")){
+    if(this.context.pageContext.legacyPageContext.isHubSite || (this.context.pageContext.legacyPageContext.hubSiteId == "4719ca28-f27a-4595-a439-270badb1ae1f" || this.context.pageContext.legacyPageContext.hubSiteId == "225a8757-c7f4-4905-9456-7a3a951a87b6")){
       this._findTriggerButton();
     }
 
