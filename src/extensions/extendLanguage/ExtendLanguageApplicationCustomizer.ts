@@ -19,7 +19,7 @@ export default class ExtendLanguageApplicationCustomizer
   @override
   public onInit(): Promise<void> {
 
-    if(this.context.pageContext.legacyPageContext.isHubSite){
+    if(this.context.pageContext.legacyPageContext.isHubSite || (this.context.pageContext.legacyPageContext.hubSiteId == "688cb2b9-e071-4b25-ad9c-2b0dca2b06ba" || this.context.pageContext.legacyPageContext.hubSiteId == "225a8757-c7f4-4905-9456-7a3a951a87b6")){
       this._findTriggerButton();
     }
 
@@ -34,57 +34,82 @@ export default class ExtendLanguageApplicationCustomizer
 
       if (langSelect) {
 
-        const target = document.getElementsByTagName("body");
+        // Find language drop down
+        const desktopInterval = window.setInterval(() => {
 
-        // Create a new instance of MutationObserver with callback in params
-        const observer = new MutationObserver(function(mutations_list) {
-          mutations_list.forEach(function(mutation) {
-            mutation.addedNodes.forEach(function(added_node) {
+          var languageList = document.getElementById(`${langSelect.id}-list`);
 
-              if(added_node.contains(document.getElementById(`${langSelect.id}-list`))){
-                const timeout = window.setTimeout(() => {
-                  var list = document.getElementById(`${langSelect.id}-list`);
-                  if(list){
-                    // inform users of our new options we are adding
-                    list.setAttribute("aria-live", "polite");
+          if(languageList){
 
-                    // Dropdown heading
-                    let profileHeader = document.createElement("div");
-                    profileHeader.innerText = strings.header;
-                    profileHeader.className = styles.dropDownHeader;
-                    profileHeader.id = "ProfileLangHeader";
+            // Keep dropdown same width when labels change
+            var width = languageList.offsetWidth;
+            languageList.setAttribute("style", `width:${width}px`);
 
-                    // grab classes from existing links / add them to our link for consistant style
-                    let profileLink = document.createElement("a");
-                    profileLink.setAttribute("href", "https://myaccount.microsoft.com/settingsandprivacy/language");
-                    profileLink.innerText = strings.link;
-                    profileLink.className = styles.dropDownItem;
-                    profileLink.setAttribute("data-index", "1");
-                    profileLink.setAttribute("data-is-focusable", "true");
-                    profileLink.setAttribute("aria-posinset", "1");
-                    profileLink.setAttribute("aria-setsize", "1");
+            window.setTimeout(() => {
 
-                    // List Group
-                    let listGroup = document.createElement("div");
-                    listGroup.setAttribute("role","group");
-                    listGroup.setAttribute("aria-labelledby", "ProfileLangHeader");
+              var languageListItem = document.getElementById(`${langSelect.id}hint`);
 
-                    listGroup.append(profileHeader);
-                    listGroup.append(profileLink);
+              // Has language dropdown been loaded and populated
+              const languageMenuInterval = window.setInterval(() => {
 
-                    list.append(listGroup);
-                  }
-                }, 250);
+                if(languageListItem){
+
+                  // Change dropdown hint header
+                  languageListItem.children[0].innerHTML = strings.PageHeader;
+
+                  // inform users of our new options we are adding
+                  languageList.setAttribute("aria-live", "polite");
+
+                  // Dropdown heading
+                  let profileHeader = document.createElement("div");
+                  profileHeader.innerText = strings.header;
+                  profileHeader.className = styles.dropDownHeader;
+                  profileHeader.id = "ProfileLangHeader";
+
+                  // grab classes from existing links / add them to our link for consistant style
+                  let profileLink = document.createElement("a");
+                  profileLink.setAttribute("href", "https://myaccount.microsoft.com/settingsandprivacy/language");
+                  profileLink.innerText = strings.link;
+                  profileLink.className = styles.dropDownItem;
+                  profileLink.setAttribute("data-index", "1");
+                  profileLink.setAttribute("data-is-focusable", "true");
+                  profileLink.setAttribute("aria-posinset", "1");
+                  profileLink.setAttribute("aria-setsize", "1");
+
+                  // List Group
+                  let listGroup = document.createElement("div");
+                  listGroup.setAttribute("role","group");
+                  listGroup.setAttribute("aria-labelledby", "ProfileLangHeader");
+
+                  listGroup.append(profileHeader);
+                  listGroup.append(profileLink);
+
+                  languageList.append(listGroup);
+
+                  window.clearInterval(languageMenuInterval);
+                }
+
+              }, 100);
+
+            }, 100);
+
+            window.clearInterval(desktopInterval);
+
+            const isDropdownStillThere = window.setInterval(() => {
+
+              var dropdown = document.getElementById(`${langSelect.id}-list`);
+
+              // If dropdown is gone, start looking again
+              if(!dropdown) {
+                this._findTriggerButton();
+                window.clearInterval(isDropdownStillThere);
               }
-            });
-          });
-        });
 
-        const config = {
-          childList: true
-        };
+            }, 500);
 
-        observer.observe(target[0], config);
+          }
+
+        }, 250);
 
         window.clearInterval(interval);
 
@@ -98,30 +123,6 @@ export default class ExtendLanguageApplicationCustomizer
       }
 
     }, 300);
-  }
-
-  public _addDesktopMenuOptions(langID) {
-    const timeout = window.setTimeout(() => {
-      var list = document.getElementById(`${langID}-list`);
-      if(list){
-        var listGroup = list.querySelector('[role="group"]');
-
-        // Dropdown heading
-        let profileHeader = document.createElement("div");
-        profileHeader.innerText = strings.header;
-        profileHeader.className = styles.dropDownHeader;
-
-        // grab classes from existing links / add them to our link for consistant style
-        let profileLink = document.createElement("a");
-        profileLink.setAttribute("href", "https://myaccount.microsoft.com/settingsandprivacy/language");
-        profileLink.innerText = strings.link;
-        profileLink.className = styles.dropDownItem;
-
-        listGroup.append(profileHeader);
-        listGroup.append(profileLink);
-
-      }
-    }, 250);
   }
 
   public _addMobileMenuOptions() {

@@ -1,4 +1,5 @@
 declare interface IExtendLanguageApplicationCustomizerStrings {
+  PageHeader: string;
   header: string;
   link: string;
 }
