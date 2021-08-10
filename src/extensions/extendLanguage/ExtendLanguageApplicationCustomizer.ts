@@ -56,6 +56,7 @@ export default class ExtendLanguageApplicationCustomizer
 
                   // Change dropdown hint header
                   languageListItem.children[0].innerHTML = strings.PageHeader;
+                  languageListItem.children[0].className = styles.boldItem;
 
                   // inform users of our new options we are adding
                   languageList.setAttribute("aria-live", "polite");
