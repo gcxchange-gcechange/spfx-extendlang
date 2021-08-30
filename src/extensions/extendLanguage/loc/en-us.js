@@ -1,6 +1,7 @@
 define([], function() {
   return {
-    "header": "Account settings:",
+    "PageHeader": "Page languages:",
+    "header": "Account language:",
     "link": "Language & region"
   }
 });

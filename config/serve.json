@@ -4,7 +4,7 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://tbssctdev.sharepoint.com/",
+      "pageUrl": "https://gcxgcedev.sharepoint.com/",
       "customActions": {
         "2b0319cf-2fb2-4615-98dc-5aeda318c13a": {
           "location": "ClientSideExtension.ApplicationCustomizer",
@@ -15,7 +15,7 @@
       }
     },
     "extendLanguage": {
-      "pageUrl": "https://tbssctdev.sharepoint.com/",
+      "pageUrl": "https://gcxgcedev.sharepoint.com/",
       "customActions": {
         "2b0319cf-2fb2-4615-98dc-5aeda318c13a": {
           "location": "ClientSideExtension.ApplicationCustomizer",
