@@ -7,8 +7,6 @@ import * as strings from 'ExtendLanguageApplicationCustomizerStrings';
 
 import styles from './components/ExtendLanguage.module.scss';
 
-const LOG_SOURCE: string = 'ExtendLanguageApplicationCustomizer';
-
 export interface IExtendLanguageApplicationCustomizerProperties {
   testMessage: string;
 }
@@ -131,7 +129,7 @@ export default class ExtendLanguageApplicationCustomizer
       let profileHeader = document.createElement("div");
       profileHeader.innerText = strings.header;
       profileHeader.className = styles.dropDownHeader;
-      profileHeader.id = "ProfileLangHeader";
+      profileHeader.id = desktopId;
 
       // grab classes from existing links / add them to our link for consistant style
       let profileLink = document.createElement("a");
@@ -146,7 +144,7 @@ export default class ExtendLanguageApplicationCustomizer
       // List Group
       let listGroup = document.createElement("div");
       listGroup.setAttribute("role","group");
-      listGroup.setAttribute("aria-labelledby", "ProfileLangHeader");
+      listGroup.setAttribute("aria-labelledby", desktopId);
 
       listGroup.append(profileHeader);
       listGroup.append(profileLink);
