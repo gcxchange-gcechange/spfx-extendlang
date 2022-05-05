@@ -1,0 +1,22 @@
+.shepherd-title {
+	font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+	color: white !important;
+}
+
+.shepherd-cancel-icon {
+	color: white !important;
+}
+
+.shepherd-header {
+	background: #0078d4 !important;
+}
+
+.shepherd-text {
+	font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+}
+
+.shepherd-button {
+    border-radius: 0 !important;
+    font-size: medium !important;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+}

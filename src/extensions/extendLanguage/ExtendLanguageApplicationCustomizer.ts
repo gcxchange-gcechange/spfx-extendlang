@@ -7,6 +7,10 @@ import * as strings from 'ExtendLanguageApplicationCustomizerStrings';
 
 import styles from './components/ExtendLanguage.module.scss';
 
+import Shepherd from 'shepherd.js';
+import 'shepherd.js/dist/css/shepherd.css'
+import './components/shepherdStyleOverride.css';
+
 export interface IExtendLanguageApplicationCustomizerProperties {
   testMessage: string;
 }
@@ -18,8 +22,8 @@ export default class ExtendLanguageApplicationCustomizer
     lastResize: number = Date.now();
     isMobile = null;
 
-  @override
-  public onInit(): Promise<void> {
+    @override
+    public onInit(): Promise<void> {
 
       if(this.context.pageContext.legacyPageContext.isHubSite || 
       (this.context.pageContext.legacyPageContext.hubSiteId == "4719ca28-f27a-4595-a439-270badb1ae1f" || 
@@ -30,190 +34,267 @@ export default class ExtendLanguageApplicationCustomizer
     }
 
     return Promise.resolve();
-  }
+    }
 
-  // Setup events for the desktop/mobile language drop down
-  public _awaitDropDownLoad() {
-    let context = this;
-    let masterInterval = setInterval(() => {
+    // Setup events for the desktop/mobile language drop down
+    public _awaitDropDownLoad() {
+      let context = this;
+      let masterInterval = setInterval(() => {
 
-      var desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
-      var mobile = document.querySelector('[class^="moreActionsButton-"]');
+        var desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
+        var mobile = document.querySelector('[class^="moreActionsButton-"]');
 
-      if(desktop) {
-        this.isMobile = false;
+        if(desktop) {
+          this.isMobile = false;
 
-        desktop.addEventListener('click', function() {
-          let menuDiscoverInterval = setInterval(() => {
+          this._startTour(desktop);
 
-            let dropDown = document.getElementById(`${desktop.id}-list`);
+          desktop.addEventListener('click', function() {
+            let menuDiscoverInterval = setInterval(() => {
 
-            if(dropDown) {
+              let dropDown = document.getElementById(`${desktop.id}-list`);
 
-              let listLoadInterval = setInterval(() => {
-                
-                let listItem = document.getElementById(`${desktop.id}hint`);
+              if(dropDown) {
 
-                if(listItem) {
+                let listLoadInterval = setInterval(() => {
 
-                  context._addDesktopMenuOptions(dropDown, listItem);
-                  clearInterval(listLoadInterval);
-                }
+                  let listItem = document.getElementById(`${desktop.id}hint`);
 
-              }, 5); // Short interval because it's in the process of loading
+                  if(listItem) {
 
-              clearInterval(menuDiscoverInterval);
-            }
-          }, 5); // Short interval because it's in the process of loading
-        });
+                    context._addDesktopMenuOptions(dropDown, listItem);
+                    clearInterval(listLoadInterval);
+                  }
 
-        clearInterval(masterInterval);
-      }
-      else if(mobile) {
-        this.isMobile = true;
+                }, 5); // Short interval because it's in the process of loading
 
-        mobile.addEventListener('click', function() {
+                clearInterval(menuDiscoverInterval);
+              }
+            }, 5); // Short interval because it's in the process of loading
+          });
 
-          let menuDiscoverInterval = setInterval(() => {
-
-            let listLoad = document.querySelector('.ms-ContextualMenu-itemText');
-
-            if(listLoad) {
-
-              context._addMobileMenuOptions();
-              clearInterval(menuDiscoverInterval);
-            }
-          }, 5); // Short interval because it's in the process of loading
-        });
-
-        clearInterval(masterInterval);
-      }
-    }, 10); // Short interval because it's in the process of loading
-  }
-
-  // Track when page resizes so we know if the layout has switched from mobile to desktop or vice versa
-  // If the layout has changed we need to rebind our events
-  public _setupResizeEvents() {
-    let context = this;
-
-    window.addEventListener('resize', function() {
-      let now = Date.now();
-      if(now >= context.lastResize + context.debounceTimeout) {
-      
-        let newLayoutState = context._isMobile();
-      
-        if(newLayoutState !== context.isMobile) {
-          context.isMobile = newLayoutState;
-          context._awaitDropDownLoad();
+          clearInterval(masterInterval);
         }
-      
-        context.lastResize = now;
+        else if(mobile) {
+          this.isMobile = true;
+
+          mobile.addEventListener('click', function() {
+
+            let menuDiscoverInterval = setInterval(() => {
+
+              let listLoad = document.querySelector('.ms-ContextualMenu-itemText');
+
+              if(listLoad) {
+
+                context._addMobileMenuOptions();
+                clearInterval(menuDiscoverInterval);
+              }
+            }, 5); // Short interval because it's in the process of loading
+          });
+
+          clearInterval(masterInterval);
+        }
+      }, 10); // Short interval because it's in the process of loading
+    }
+
+    // Track when page resizes so we know if the layout has switched from mobile to desktop or vice versa
+    // If the layout has changed we need to rebind our events
+    public _setupResizeEvents() {
+      let context = this;
+
+      window.addEventListener('resize', function() {
+        let now = Date.now();
+        if(now >= context.lastResize + context.debounceTimeout) {
+        
+          let newLayoutState = context._isMobile();
+        
+          if(newLayoutState !== context.isMobile) {
+            context.isMobile = newLayoutState;
+            context._awaitDropDownLoad();
+          }
+        
+          context.lastResize = now;
+        }
+      });
+    }
+
+    public _addDesktopMenuOptions(languageList, languageListItem) {
+      const desktopId = "ProfileLangHeader";
+
+      let exists = document.getElementById(desktopId);
+
+      if(!exists && languageList && languageListItem) {
+        // Change dropdown hint header
+        languageListItem.children[0].innerHTML = strings.PageHeader;
+        languageListItem.children[0].className = styles.boldItem;
+
+        // inform users of our new options we are adding
+        languageList.setAttribute("aria-live", "polite");
+
+        // Dropdown heading
+        let profileHeader = document.createElement("div");
+        profileHeader.innerText = strings.header;
+        profileHeader.className = styles.dropDownHeader;
+        profileHeader.id = desktopId;
+
+        // grab classes from existing links / add them to our link for consistant style
+        let profileLink = document.createElement("a");
+        profileLink.setAttribute("href", "https://myaccount.microsoft.com/settingsandprivacy/language");
+        profileLink.innerText = strings.link;
+        profileLink.className = styles.dropDownItem;
+        profileLink.setAttribute("data-index", "1");
+        profileLink.setAttribute("data-is-focusable", "true");
+        profileLink.setAttribute("aria-posinset", "1");
+        profileLink.setAttribute("aria-setsize", "1");
+
+        // List Group
+        let listGroup = document.createElement("div");
+        listGroup.setAttribute("role","group");
+        listGroup.setAttribute("aria-labelledby", desktopId);
+
+        listGroup.append(profileHeader);
+        listGroup.append(profileLink);
+
+        languageList.append(listGroup);
       }
-    });
-  }
-
-  public _addDesktopMenuOptions(languageList, languageListItem) {
-    const desktopId = "ProfileLangHeader";
-
-    let exists = document.getElementById(desktopId);
-
-    if(!exists && languageList && languageListItem) {
-      // Change dropdown hint header
-      languageListItem.children[0].innerHTML = strings.PageHeader;
-      languageListItem.children[0].className = styles.boldItem;
-
-      // inform users of our new options we are adding
-      languageList.setAttribute("aria-live", "polite");
-
-      // Dropdown heading
-      let profileHeader = document.createElement("div");
-      profileHeader.innerText = strings.header;
-      profileHeader.className = styles.dropDownHeader;
-      profileHeader.id = desktopId;
-
-      // grab classes from existing links / add them to our link for consistant style
-      let profileLink = document.createElement("a");
-      profileLink.setAttribute("href", "https://myaccount.microsoft.com/settingsandprivacy/language");
-      profileLink.innerText = strings.link;
-      profileLink.className = styles.dropDownItem;
-      profileLink.setAttribute("data-index", "1");
-      profileLink.setAttribute("data-is-focusable", "true");
-      profileLink.setAttribute("aria-posinset", "1");
-      profileLink.setAttribute("aria-setsize", "1");
-
-      // List Group
-      let listGroup = document.createElement("div");
-      listGroup.setAttribute("role","group");
-      listGroup.setAttribute("aria-labelledby", desktopId);
-
-      listGroup.append(profileHeader);
-      listGroup.append(profileLink);
-
-      languageList.append(listGroup);
     }
-  }
 
-  public _addMobileMenuOptions() {
-    const mobileId = "gcx-gce-langauge-extension-mobile-list";
+    public _addMobileMenuOptions() {
+      const mobileId = "gcx-gce-langauge-extension-mobile-list";
 
-    let list = document.getElementsByClassName('ms-ContextualMenu-list');
-    let exists = document.getElementById(mobileId);
+      let list = document.getElementsByClassName('ms-ContextualMenu-list');
+      let exists = document.getElementById(mobileId);
 
-    if(list && !exists) {
+      if(list && !exists) {
 
-      let listItem = document.createElement("li");
+        let listItem = document.createElement("li");
 
-      listItem.setAttribute("role", "presentation");
-      listItem.setAttribute("id", mobileId);
+        listItem.setAttribute("role", "presentation");
+        listItem.setAttribute("id", mobileId);
 
-      let accountList = document.createElement("ul");
+        let accountList = document.createElement("ul");
 
-      accountList.className = styles.mobileList;
-      accountList.id = "mobileLanguageExtension";
-      accountList.setAttribute("role", "menu");
+        accountList.className = styles.mobileList;
+        accountList.id = "mobileLanguageExtension";
+        accountList.setAttribute("role", "menu");
 
-      let listSeparator = document.createElement("li");
+        let listSeparator = document.createElement("li");
 
-      listSeparator.className = styles.mobileSeparator;
-      listSeparator.setAttribute("aria-hidden", "true");
+        listSeparator.className = styles.mobileSeparator;
+        listSeparator.setAttribute("aria-hidden", "true");
 
-      let profileHeader = document.createElement("li");
+        let profileHeader = document.createElement("li");
 
-      profileHeader.innerHTML = `<div class="ms-ContextualMenu-header ${styles.mobileProfileHeader}"><div class="ms-ContextualMenu-linkContent ${styles.mobileProfileHeaderItem}"><span class="ms-ContextualMenu-itemText ${styles.mobileProfileHeaderLabel}">${strings.header}</span></div></div>`;
-      profileHeader.id = "mobileProfileHeader";
+        profileHeader.innerHTML = `<div class="ms-ContextualMenu-header ${styles.mobileProfileHeader}"><div class="ms-ContextualMenu-linkContent ${styles.mobileProfileHeaderItem}"><span class="ms-ContextualMenu-itemText ${styles.mobileProfileHeaderLabel}">${strings.header}</span></div></div>`;
+        profileHeader.id = "mobileProfileHeader";
 
-      let profileLink = document.createElement("li");
+        let profileLink = document.createElement("li");
 
-      profileLink.innerHTML = `<div class="ms-ContextualMenu-linkContent ${styles.mobileProfileLink}"><a href="https://myaccount.microsoft.com/settingsandprivacy/language"><span class="ms-ContextualMenu-itemText">${strings.link}</span></a></div>`;
-      profileLink.setAttribute("aria-posinset", "1");
-      profileLink.setAttribute("aria-setsize", "1");
-      profileLink.setAttribute("aria-disabled", "false");
+        profileLink.innerHTML = `<div class="ms-ContextualMenu-linkContent ${styles.mobileProfileLink}"><a href="https://myaccount.microsoft.com/settingsandprivacy/language"><span class="ms-ContextualMenu-itemText">${strings.link}</span></a></div>`;
+        profileLink.setAttribute("aria-posinset", "1");
+        profileLink.setAttribute("aria-setsize", "1");
+        profileLink.setAttribute("aria-disabled", "false");
 
-      let divGroup = document.createElement("div");
+        let divGroup = document.createElement("div");
 
-      divGroup.setAttribute("role", "group");
-      divGroup.setAttribute("aria-labelledby", "mobileProfileHeader");
+        divGroup.setAttribute("role", "group");
+        divGroup.setAttribute("aria-labelledby", "mobileProfileHeader");
 
-      accountList.append(listSeparator);
-      accountList.append(profileHeader);
-      accountList.append(profileLink);
+        accountList.append(listSeparator);
+        accountList.append(profileHeader);
+        accountList.append(profileLink);
 
-      divGroup.append(accountList);
+        divGroup.append(accountList);
 
-      listItem.append(divGroup);
+        listItem.append(divGroup);
 
-      list[0].appendChild(listItem);
-      list[0].setAttribute("style", "overflow: hidden;");
+        list[0].appendChild(listItem);
+        list[0].setAttribute("style", "overflow: hidden;");
+      }
     }
-  }
 
-  public _isMobile() {
-    if(document.querySelector('[data-automation-id="LanguageSelector"]')) {
-      return false;
+    public _isMobile() {
+      if(document.querySelector('[data-automation-id="LanguageSelector"]')) {
+        return false;
+      }
+      else if(document.querySelector('[class^="moreActionsButton-"]')) {
+        return true;
+      }
+      return null;
     }
-    else if(document.querySelector('[class^="moreActionsButton-"]')) {
-      return true;
+
+    public _startTour(element) {
+      const tour = new Shepherd.Tour({
+        defaultStepOptions: {
+          cancelIcon: {
+            enabled: true
+          },
+          scrollTo: { behavior: 'smooth', block: 'center'}
+        },
+        useModalOverlay: true
+      });
+
+      // STEP 1
+      tour.addStep({
+        title: 'Welcome to GCXchange',
+        text: 'Welcome! Before we get started, let\s make sure your language preferences are setup correctly.',
+        attachTo: {
+          element: element,
+          on: 'left'
+        },
+        buttons: [
+          {
+            action() {
+
+              setTimeout(() => {
+                (element as HTMLElement).click();
+              }, 500);
+              
+              return this.next();
+            },
+            text: 'Next'
+          }
+        ],
+        id: 'creating',
+        canClickTarget: false,
+        popperOptions: {
+          modifiers: [{ name: 'offset', options: { offset: [0, 15] } }]
+        }
+      });
+
+      // STEP 2
+      tour.addStep({
+        title: 'Language Settings',
+        text: 'You can select your prefered language here. It\'s recommended you update your <b>account language</b> settings as well.',
+        attachTo: {
+          element: element,//document.getElementById(`${element.id}hint`), 
+          on: 'left'
+        },
+        buttons: [
+          {
+            action() {
+              return this.back();
+            },
+            classes: 'shepherd-button-secondary',
+            text: 'Back'
+          },
+          {
+            action() {
+              return this.next();
+            },
+            text: 'Done'
+          }
+        ],
+        id: 'creating',
+        popperOptions: {
+          modifiers: [{ name: 'offset', options: { offset: [0, 60] } }]
+        }
+      });
+      
+      setTimeout(() => {
+        if(document.querySelector('.shepherd-content'))
+          return;
+        tour.start();
+      }, 1000);
     }
-    return null;
-  }
 }
