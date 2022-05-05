@@ -224,6 +224,9 @@ export default class ExtendLanguageApplicationCustomizer
     }
 
     public _startTour(element) {
+      let profile = document.getElementById('O365_HeaderRightRegion');
+      let stepDelay = 500;
+
       const tour = new Shepherd.Tour({
         defaultStepOptions: {
           cancelIcon: {
@@ -248,17 +251,19 @@ export default class ExtendLanguageApplicationCustomizer
 
               setTimeout(() => {
                 (element as HTMLElement).click();
-              }, 500);
+              }, stepDelay);
               
               return this.next();
             },
-            text: 'Next'
+            text: 'Next',
+            label: 'Next Step'
           }
         ],
-        id: 'creating',
+        id: 'step1',
+        modalOverlayOpeningPadding: 5,
         canClickTarget: false,
         popperOptions: {
-          modifiers: [{ name: 'offset', options: { offset: [0, 15] } }]
+          modifiers: [{ name: 'offset', options: { offset: [0, 20] } }]
         }
       });
 
@@ -276,19 +281,88 @@ export default class ExtendLanguageApplicationCustomizer
               return this.back();
             },
             classes: 'shepherd-button-secondary',
-            text: 'Back'
+            text: 'Back',
+            label: 'Previous Step'
+          },
+          {
+            action() {
+              tour.next();
+            },
+            text: 'Next',
+            label: 'Next Step'
+          }
+        ],
+        id: 'step2',
+        modalOverlayOpeningPadding: 5,
+        arrow: false,
+        popperOptions: {
+          modifiers: [{ name: 'offset', options: { offset: [0, 60] } }]
+        }
+      });
+
+      // STEP 3
+      tour.addStep({
+        title: 'Profile Settings',
+        text: 'Lastly, you can also set your profile language preferences here by <b>clicking the icon</b>, going to <b>view account</b> and navigating to the <b>settings & privacy</b> section to the left.',
+        attachTo: {
+          element: profile, 
+          on: 'left'
+        },
+        buttons: [
+          {
+            action() {
+
+              setTimeout(() => {
+                (element as HTMLElement).click();
+              }, stepDelay);
+
+              return this.back();
+            },
+            classes: 'shepherd-button-secondary',
+            text: 'Back',
+            label: 'Previous Step'
           },
           {
             action() {
               return this.next();
             },
-            text: 'Done'
+            text: 'Next',
+            label: 'Next Step'
           }
         ],
-        id: 'creating',
+        id: 'step3',
+        modalOverlayOpeningPadding: 0,
         popperOptions: {
-          modifiers: [{ name: 'offset', options: { offset: [0, 60] } }]
+          modifiers: [{ name: 'offset', options: { offset: [0, 15] } }]
         }
+      });
+
+       // STEP 4
+       tour.addStep({
+        title: 'Enjoy!',
+        text: 'That\'s all for now! We hope you enjoy using GCXchange. Feel free to press the back button to go to any previous steps you may have skipped.',
+        attachTo: {
+          element: null, 
+          on: 'left'
+        },
+        buttons: [
+          {
+            action() {
+              return this.back();
+            },
+            classes: 'shepherd-button-secondary',
+            text: 'Back',
+            label: 'Previous Step'
+          },
+          {
+            action() {
+              return this.next();
+            },
+            text: 'Done',
+            label: 'End Tour'
+          }
+        ],
+        id: 'step4',
       });
       
       setTimeout(() => {
