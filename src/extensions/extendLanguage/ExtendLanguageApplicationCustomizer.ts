@@ -223,9 +223,12 @@ export default class ExtendLanguageApplicationCustomizer
       return null;
     }
 
+    // TODO: Refactor into its own file if we actually use this 
     public _startTour(element) {
       let profile = document.getElementById('O365_HeaderRightRegion');
       let stepDelay = 500;
+      let dropDownInterval = null;
+      let dropDownCopy = null;
 
       const tour = new Shepherd.Tour({
         defaultStepOptions: {
@@ -249,9 +252,7 @@ export default class ExtendLanguageApplicationCustomizer
           {
             action() {
 
-              setTimeout(() => {
-                (element as HTMLElement).click();
-              }, stepDelay);
+              copyDropDown();
               
               return this.next();
             },
@@ -270,7 +271,7 @@ export default class ExtendLanguageApplicationCustomizer
       // STEP 2
       tour.addStep({
         title: 'Language Settings',
-        text: 'You can select your prefered language here. It\'s recommended you update your <b>account language</b> settings as well.',
+        text: 'You can select your preferred language here. It\'s recommended you update your <b>account language</b> settings as well.',
         attachTo: {
           element: element,//document.getElementById(`${element.id}hint`), 
           on: 'left'
@@ -278,6 +279,9 @@ export default class ExtendLanguageApplicationCustomizer
         buttons: [
           {
             action() {
+
+              cleanupDropDown();
+
               return this.back();
             },
             classes: 'shepherd-button-secondary',
@@ -286,6 +290,9 @@ export default class ExtendLanguageApplicationCustomizer
           },
           {
             action() {
+
+              cleanupDropDown();
+
               tour.next();
             },
             text: 'Next',
@@ -294,6 +301,7 @@ export default class ExtendLanguageApplicationCustomizer
         ],
         id: 'step2',
         modalOverlayOpeningPadding: 5,
+        canClickTarget: false,
         arrow: false,
         popperOptions: {
           modifiers: [{ name: 'offset', options: { offset: [0, 60] } }]
@@ -303,7 +311,7 @@ export default class ExtendLanguageApplicationCustomizer
       // STEP 3
       tour.addStep({
         title: 'Profile Settings',
-        text: 'Lastly, you can also set your profile language preferences here by <b>clicking the icon</b>, going to <b>view account</b> and navigating to the <b>settings & privacy</b> section to the left.',
+        text: 'Lastly, you can also set your profile language preferences here by <b>clicking the icon</b>, going to <b>view account</b>, and navigating to the <b>settings & privacy</b> section to the left.',
         attachTo: {
           element: profile, 
           on: 'left'
@@ -312,9 +320,7 @@ export default class ExtendLanguageApplicationCustomizer
           {
             action() {
 
-              setTimeout(() => {
-                (element as HTMLElement).click();
-              }, stepDelay);
+              copyDropDown();
 
               return this.back();
             },
@@ -332,6 +338,7 @@ export default class ExtendLanguageApplicationCustomizer
         ],
         id: 'step3',
         modalOverlayOpeningPadding: 0,
+        canClickTarget: false,
         popperOptions: {
           modifiers: [{ name: 'offset', options: { offset: [0, 15] } }]
         }
@@ -369,6 +376,75 @@ export default class ExtendLanguageApplicationCustomizer
         if(document.querySelector('.shepherd-content'))
           return;
         tour.start();
+        ariaHide("div[class^='SPPage']");
+
+        tour.on("cancel", handleEndTour);
+        tour.on("complete", handleEndTour);
+
       }, 1000);
+
+      function copyDropDown() {
+        setTimeout(() => {
+
+          if(dropDownCopy) {
+            document.body.appendChild(dropDownCopy);
+            return;
+          }
+
+          (element as HTMLElement).click();
+
+          dropDownInterval = setInterval(() => {
+            let dropdDown = document.querySelector('.ms-Layer--fixed');
+
+            if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
+
+              dropdDown.id = 'gcx-tour-dropdown';
+              
+              let actions = dropdDown.querySelectorAll('button, a');
+              actions.forEach(element => {
+                (element as HTMLElement).style.pointerEvents = 'none';
+              });
+
+              dropDownCopy = dropdDown.cloneNode(true);
+
+              document.body.appendChild(dropDownCopy);
+              //dropdDown.remove();
+              
+              clearInterval(dropDownInterval);
+            }
+          }, 10);
+
+        }, stepDelay);
+      }
+
+      function cleanupDropDown() {
+        if(dropDownCopy)
+          dropDownCopy.remove();
+
+        if(dropDownInterval)
+          clearInterval(dropDownInterval);
+      }
+
+      function ariaHide(selector) {
+        if (selector) {
+          let element = document.querySelector(selector);
+          if(element) {
+            element.ariaHidden = "true";
+          }
+        }
+      }
+
+      function ariaReveal(selector) {
+        if (selector) {
+          let element = document.querySelector(selector);
+          if(element) {
+            element.ariaHidden = "false";
+          }
+        }
+      }
+
+      function handleEndTour() {
+        ariaReveal("div[class^='SPPage']");
+      }
     }
 }
