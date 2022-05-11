@@ -21,7 +21,7 @@ export default class ExtendLanguageApplicationCustomizer
     debounceTimeout: number = 200;
     lastResize: number = Date.now();
     isMobile = null;
-
+    
     @override
     public onInit(): Promise<void> {
 
@@ -371,17 +371,18 @@ export default class ExtendLanguageApplicationCustomizer
         ],
         id: 'step4',
       });
-      
-      setTimeout(() => {
-        if(document.querySelector('.shepherd-content'))
+
+      function startTour() {
+        if(!urlParamExists() || document.querySelector('.shepherd-content')) {
           return;
+        }
+
         tour.start();
         hideAccessibility("div[class^='SPPage']");
 
         tour.on("cancel", handleEndTour);
         tour.on("complete", handleEndTour);
-
-      }, 1000);
+      }
 
       function copyDropDown() {
         setTimeout(() => {
@@ -448,5 +449,17 @@ export default class ExtendLanguageApplicationCustomizer
       function handleEndTour() {
         revealAccessibility("div[class^='SPPage']");
       }
+
+      function urlParamExists() {
+        let param = window.location.href.split('gcxLangTour')[1];
+        if(param) {
+          return true;
+        }
+        return false;
+      }
+
+      setTimeout(() => {
+        startTour();
+      }, 1000);
     }
 }
