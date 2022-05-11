@@ -376,7 +376,7 @@ export default class ExtendLanguageApplicationCustomizer
         if(document.querySelector('.shepherd-content'))
           return;
         tour.start();
-        ariaHide("div[class^='SPPage']");
+        hideAccessibility("div[class^='SPPage']");
 
         tour.on("cancel", handleEndTour);
         tour.on("complete", handleEndTour);
@@ -425,26 +425,28 @@ export default class ExtendLanguageApplicationCustomizer
           clearInterval(dropDownInterval);
       }
 
-      function ariaHide(selector) {
+      function hideAccessibility(selector) {
         if (selector) {
           let element = document.querySelector(selector);
           if(element) {
             element.ariaHidden = "true";
+            element.tabIndex = -1;
           }
         }
       }
 
-      function ariaReveal(selector) {
+      function revealAccessibility(selector) {
         if (selector) {
           let element = document.querySelector(selector);
           if(element) {
             element.ariaHidden = "false";
+            element.removeAttribute('tabIndex');
           }
         }
       }
 
       function handleEndTour() {
-        ariaReveal("div[class^='SPPage']");
+        revealAccessibility("div[class^='SPPage']");
       }
     }
 }
