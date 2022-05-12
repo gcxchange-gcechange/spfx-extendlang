@@ -8,8 +8,7 @@ import * as strings from 'ExtendLanguageApplicationCustomizerStrings';
 import styles from './components/ExtendLanguage.module.scss';
 
 import Tour from './components/tour/tour';
-;
-import 'shepherd.js/dist/css/shepherd.css'
+import 'shepherd.js/dist/css/shepherd.css';
 import './components/shepherdStyleOverride.css';
 
 export interface IExtendLanguageApplicationCustomizerProperties {
@@ -19,6 +18,7 @@ export interface IExtendLanguageApplicationCustomizerProperties {
 export default class ExtendLanguageApplicationCustomizer
   extends BaseApplicationCustomizer<IExtendLanguageApplicationCustomizerProperties> {
 
+    tour: Tour = null;
     debounceTimeout: number = 200;
     lastResize: number = Date.now();
     isMobile = null;
@@ -43,13 +43,15 @@ export default class ExtendLanguageApplicationCustomizer
       let masterInterval = setInterval(() => {
 
         var desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
-        var mobile = document.querySelector('[class^="moreActionsButton-"]');
+        var mobile = document.querySelector('[class^="moreActionsButton-"] button');
 
         if(desktop) {
           this.isMobile = false;
 
-          let tour = new Tour((desktop as HTMLElement), false);
-          tour.startTour();
+          if(!this.tour) {
+            this.tour = new Tour((desktop as HTMLElement),  this.isMobile);
+            this.tour.startTour();
+          }
 
           desktop.addEventListener('click', function() {
             let menuDiscoverInterval = setInterval(() => {
@@ -79,6 +81,11 @@ export default class ExtendLanguageApplicationCustomizer
         }
         else if(mobile) {
           this.isMobile = true;
+
+          if(!this.tour) {
+            this.tour = new Tour((mobile as HTMLElement),  this.isMobile);
+            this.tour.startTour();
+          }
 
           mobile.addEventListener('click', function() {
 
@@ -111,6 +118,9 @@ export default class ExtendLanguageApplicationCustomizer
           let newLayoutState = context._isMobile();
         
           if(newLayoutState !== context.isMobile) {
+            if(context.tour)
+              context.tour.stopTour();
+
             context.isMobile = newLayoutState;
             context._awaitDropDownLoad();
           }
