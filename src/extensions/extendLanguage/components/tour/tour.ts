@@ -262,6 +262,18 @@ export default class Tour {
     return false;
   }
 
+  private isEnglish() {
+    if(this.urlParamExists()) {
+      if(window.location.href.indexOf('gcxLangTour=en') > -1) {
+        return true;
+      }
+      else if (window.location.href.indexOf('gcxLangTour=fr') > -1) {
+        return false;
+      }
+    }
+    return null;
+  }
+
   private cleanseUrl() {
     if (this.urlParamExists()) {
 
