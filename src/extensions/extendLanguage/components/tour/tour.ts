@@ -33,11 +33,12 @@ export default class Tour {
 
   public startTour() {
     setTimeout(() => {
-      if(!this.urlParamExists() || document.querySelector('.shepherd-content')) {
+      if (!this.urlParamExists() || document.querySelector('.shepherd-content')) {
         return;
       }
 
       this.tour.start();
+      this.cleanseUrl();
       this.hideAccessibility("div[class^='SPPage']");
 
       this.tour.on("cancel", this.handleEndTour);
@@ -47,7 +48,7 @@ export default class Tour {
   }
 
   public stopTour() {
-    if(this.tour) {
+    if (this.tour) {
       this.tour.cancel();
     }
   }
@@ -219,17 +220,17 @@ export default class Tour {
   }
 
   private cleanupDropDown() {
-    if(this.dropDownCopy)
+    if (this.dropDownCopy)
       this.dropDownCopy.remove();
 
-    if(this.dropDownInterval)
+    if (this.dropDownInterval)
       clearInterval(this.dropDownInterval);
   }
 
   private hideAccessibility(selector: any) {
     if (selector) {
       let element: any = document.querySelector(selector);
-      if(element) {
+      if (element) {
         element.ariaHidden = "true";
         element.tabIndex = -1;
       }
@@ -238,7 +239,7 @@ export default class Tour {
 
   private handleEndTour() {
     let element: any = document.querySelector("div[class^='SPPage']");
-    if(element) {
+    if (element) {
       element.ariaHidden = "false";
       element.removeAttribute('tabIndex');
     }
@@ -246,9 +247,21 @@ export default class Tour {
 
   private urlParamExists() {
     let param = window.location.href.split('gcxLangTour')[1];
-    if(param) {
+    if (param) {
       return true;
     }
     return false;
+  }
+
+  private cleanseUrl() {
+    if (this.urlParamExists()) {
+
+      let newUrl: string = window.location.href.replace('gcxLangTour&', '').replace('&gcxLangTour', '').replace('gcxLangTour', '');
+      const newState: any = { additionalInformation: 'Updated the URL after the tour.' };
+      const newTitle: string = "Home - Home";
+
+      window.history.pushState(newState, newTitle, newUrl);
+      window.history.replaceState(newState, newTitle, newUrl);
+    }
   }
 }
