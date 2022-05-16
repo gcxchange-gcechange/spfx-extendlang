@@ -32,6 +32,8 @@ export default class Tour {
   }
 
   public startTour() {
+    let context = this;
+
     setTimeout(() => {
       if (!this.urlParamExists() || document.querySelector('.shepherd-content')) {
         return;
@@ -41,8 +43,15 @@ export default class Tour {
       this.cleanseUrl();
       this.hideAccessibility("div[class^='SPPage']");
 
-      this.tour.on("cancel", this.handleEndTour);
-      this.tour.on("complete", this.handleEndTour);
+      this.tour.on("cancel", () => {
+        context.handleEndTour();
+        context.cleanupDropDown();
+      });
+      
+      this.tour.on("complete", () => {
+        context.handleEndTour();
+        context.cleanupDropDown();
+      });
 
     }, this.tourDelay);
   }
