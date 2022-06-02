@@ -5,6 +5,10 @@ import {
 
 import * as strings from 'ExtendLanguageApplicationCustomizerStrings';
 
+import { spfi, SPFx } from "@pnp/sp";
+import "@pnp/sp/webs";
+import "@pnp/sp/site-users/web";
+
 import styles from './components/ExtendLanguage.module.scss';
 
 import Tour from './components/tour/tour';
@@ -22,19 +26,28 @@ export default class ExtendLanguageApplicationCustomizer
     debounceTimeout: number = 200;
     lastResize: number = Date.now();
     isMobile = null;
+    URL: string = "https://myaccount.microsoft.com/settingsandprivacy/language";
     
     @override
-    public onInit(): Promise<void> {
+    protected async onInit(): Promise<void> {
+
+      await super.onInit();
 
       if(this.context.pageContext.legacyPageContext.isHubSite || 
       (this.context.pageContext.legacyPageContext.hubSiteId == "4719ca28-f27a-4595-a439-270badb1ae1f" || 
-      this.context.pageContext.legacyPageContext.hubSiteId == "225a8757-c7f4-4905-9456-7a3a951a87b6")){
+      this.context.pageContext.legacyPageContext.hubSiteId == "225a8757-c7f4-4905-9456-7a3a951a87b6")) {
+
+        try {
+          const sp = await spfi().using(SPFx(this.context));
+          let user = await sp.web.currentUser();
+          this.createURL(this.context.pageContext.aadInfo.tenantId._guid, encodeURIComponent(user.UserPrincipalName));
+        } catch (e) {}
         
         this._setupResizeEvents();
         this._awaitDropDownLoad();
-    }
+      }
 
-    return Promise.resolve();
+      return Promise.resolve();
     }
 
     // Setup events for the desktop/mobile language drop down
@@ -151,7 +164,7 @@ export default class ExtendLanguageApplicationCustomizer
 
         // grab classes from existing links / add them to our link for consistant style
         let profileLink = document.createElement("a");
-        profileLink.setAttribute("href", "https://myaccount.microsoft.com/settingsandprivacy/language");
+        profileLink.setAttribute("href", this.URL);
         profileLink.innerText = strings.link;
         profileLink.className = styles.dropDownItem;
         profileLink.setAttribute("data-index", "1");
@@ -202,7 +215,7 @@ export default class ExtendLanguageApplicationCustomizer
 
         let profileLink = document.createElement("li");
 
-        profileLink.innerHTML = `<div class="ms-ContextualMenu-linkContent ${styles.mobileProfileLink}"><a href="https://myaccount.microsoft.com/settingsandprivacy/language"><span class="ms-ContextualMenu-itemText">${strings.link}</span></a></div>`;
+        profileLink.innerHTML = `<div class="ms-ContextualMenu-linkContent ${styles.mobileProfileLink}"><a href="` + this.URL + `"><span class="ms-ContextualMenu-itemText">${strings.link}</span></a></div>`;
         profileLink.setAttribute("aria-posinset", "1");
         profileLink.setAttribute("aria-setsize", "1");
         profileLink.setAttribute("aria-disabled", "false");
@@ -223,6 +236,10 @@ export default class ExtendLanguageApplicationCustomizer
         list[0].appendChild(listItem);
         list[0].setAttribute("style", "overflow: hidden;");
       }
+    }
+
+    public createURL(tenantId: string, userPrincipalName: string) {
+      this.URL = "https://myaccount.microsoft.com/settingsandprivacy/language/?ref=MeControl&login_hint=" + userPrincipalName + "&tid=" + tenantId;
     }
 
     public _isMobile() {
