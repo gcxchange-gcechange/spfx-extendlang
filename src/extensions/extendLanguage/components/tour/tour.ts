@@ -1,4 +1,5 @@
 import Shepherd from 'shepherd.js';
+import * as strings from 'ExtendLanguageApplicationCustomizerStrings';
 
 export default class Tour {
 
@@ -67,8 +68,8 @@ export default class Tour {
 
     // Step 1
     this.tour.addStep({
-      title: 'Welcome to GCXchange',
-      text: 'Welcome! Before we get started, let\s make sure your language preferences are setup correctly.',
+      title: strings.step1header,
+      text: strings.step1body,
       attachTo: {
         element: this.target,
         on: this.isMobile? 'bottom' : 'left'
@@ -81,8 +82,8 @@ export default class Tour {
 
             return this.next();
           },
-          text: 'Next',
-          label: 'Next Step'
+          text: strings.next,
+          label: strings.next
         }
       ],
       id: 'step1',
@@ -92,11 +93,11 @@ export default class Tour {
         modifiers: [{ name: 'offset', options: { offset: [0, 20] } }]
       }
     });
-
+    //https://devgcx.sharepoint.com/?gcxLangTour=en&=en&=en&debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fmanifests.js&loadSPFX=true&customActions=%7B%222b0319cf-2fb2-4615-98dc-5aeda318c13a%22%3A%7B%22location%22%3A%22ClientSideExtension.ApplicationCustomizer%22%2C%22properties%22%3A%7B%22testMessage%22%3A%22Test+message%22%7D%7D%7D
       // STEP 2
     this.tour.addStep({
-      title: 'Language Settings',
-      text: 'You can select your preferred language here. It\'s recommended you update your <b>account language</b> settings as well.',
+      title: strings.step2header,
+      text: strings.step2body,
       attachTo: {
         element: this.target,
         on: this.isMobile? 'bottom' : 'left'
@@ -108,16 +109,16 @@ export default class Tour {
             return this.back();
           },
           classes: 'shepherd-button-secondary',
-          text: 'Back',
-          label: 'Previous Step'
+          text: strings.back,
+          label: strings.back
         },
         {
           action() {
             context.cleanupDropDown();
             context.tour.next();
           },
-          text: 'Next',
-          label: 'Next Step'
+          text: strings.next,
+          label: strings.next
         }
       ],
       id: 'step2',
@@ -130,45 +131,45 @@ export default class Tour {
     });
 
     // STEP 3
-    this.tour.addStep({
-      title: 'Profile Settings',
-      text: 'Lastly, you can also set your profile language preferences here by <b>clicking the icon</b>, going to <b>view account</b>, and navigating to the <b>settings & privacy</b> section to the left.',
-      attachTo: {
-        element: context.profile, 
-        on: this.isMobile? 'bottom' : 'left'
-      },
-      buttons: [
-        {
-          action() {
-            if(!context.isMobile)
-              context.copyDropDown();
-              
-            return this.back();
-          },
-          classes: 'shepherd-button-secondary',
-          text: 'Back',
-          label: 'Previous Step'
-        },
-        {
-          action() {
-            return this.next();
-          },
-          text: 'Next',
-          label: 'Next Step'
-        }
-      ],
-      id: 'step3',
-      modalOverlayOpeningPadding: 0,
-      canClickTarget: false,
-      popperOptions: {
-        modifiers: [{ name: 'offset', options: { offset: [0, 15] } }]
-      }
-    });
+    //this.tour.addStep({
+    //  title: 'Profile Settings',
+    //  text: 'Lastly, you can also set your profile language preferences here by <b>clicking the icon</b>, going to <b>view account</b>, and navigating to the <b>settings & privacy</b> section to the left.',
+    //  attachTo: {
+    //    element: context.profile, 
+    //    on: this.isMobile? 'bottom' : 'left'
+    //  },
+    //  buttons: [
+    //    {
+    //      action() {
+    //        if(!context.isMobile)
+    //          context.copyDropDown();
+    //          
+    //        return this.back();
+    //      },
+    //      classes: 'shepherd-button-secondary',
+    //      text: 'Back',
+    //      label: 'Previous Step'
+    //    },
+    //    {
+    //      action() {
+    //        return this.next();
+    //      },
+    //      text: 'Next',
+    //      label: 'Next Step'
+    //    }
+    //  ],
+    //  id: 'step3',
+    //  modalOverlayOpeningPadding: 0,
+    //  canClickTarget: false,
+    //  popperOptions: {
+    //    modifiers: [{ name: 'offset', options: { offset: [0, 15] } }]
+    //  }
+    //});
 
-     // STEP 4
+     // STEP 3
      this.tour.addStep({
-      title: 'Enjoy!',
-      text: 'That\'s all for now! We hope you enjoy using GCXchange. Feel free to press the back button to go to any previous steps you may have skipped.',
+      title: strings.step3header,
+      text: strings.step3body,
       attachTo: {
         element: null, 
         on: this.isMobile? 'bottom' : 'left'
@@ -176,18 +177,21 @@ export default class Tour {
       buttons: [
         {
           action() {
+            if(!context.isMobile)
+              context.copyDropDown();
+
             return this.back();
           },
           classes: 'shepherd-button-secondary',
-          text: 'Back',
-          label: 'Previous Step'
+          text: strings.back,
+          label: strings.back
         },
         {
           action() {
             return this.next();
           },
-          text: 'Done',
-          label: 'End Tour'
+          text: strings.done,
+          label: strings.done
         }
       ],
       id: 'step4',
