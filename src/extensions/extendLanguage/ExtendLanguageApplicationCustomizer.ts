@@ -67,27 +67,13 @@ export default class ExtendLanguageApplicationCustomizer
           }
 
           desktop.addEventListener('click', function() {
-            let menuDiscoverInterval = setInterval(() => {
+            context._desktopClickFunc(context);
+          });
 
-              let dropDown = document.getElementById(`${desktop.id}-list`);
-
-              if(dropDown) {
-
-                let listLoadInterval = setInterval(() => {
-
-                  let listItem = document.getElementById(`${desktop.id}hint`);
-
-                  if(listItem) {
-
-                    context._addDesktopMenuOptions(dropDown, listItem);
-                    clearInterval(listLoadInterval);
-                  }
-
-                }, 5); // Short interval because it's in the process of loading
-
-                clearInterval(menuDiscoverInterval);
-              }
-            }, 5); // Short interval because it's in the process of loading
+          desktop.addEventListener('keydown', function(e: KeyboardEvent) {
+            if (e.key === 'Enter'){
+              context._desktopClickFunc(context);
+            }
           });
 
           clearInterval(masterInterval);
@@ -101,22 +87,56 @@ export default class ExtendLanguageApplicationCustomizer
           }
 
           mobile.addEventListener('click', function() {
+            context._mobileClickFunc(context);
+          });
 
-            let menuDiscoverInterval = setInterval(() => {
-
-              let listLoad = document.querySelector('.ms-ContextualMenu-itemText');
-
-              if(listLoad) {
-
-                context._addMobileMenuOptions();
-                clearInterval(menuDiscoverInterval);
-              }
-            }, 5); // Short interval because it's in the process of loading
+          mobile.addEventListener('keydown', function(e: KeyboardEvent) {
+            if (e.key === 'Enter'){
+              context._mobileClickFunc(context);
+            }
           });
 
           clearInterval(masterInterval);
         }
       }, 10); // Short interval because it's in the process of loading
+    }
+
+    public _desktopClickFunc(context) {
+      var desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
+      let menuDiscoverInterval = setInterval(() => {
+
+        let dropDown = document.getElementById(`${desktop.id}-list`);
+
+        if(dropDown) {
+
+          let listLoadInterval = setInterval(() => {
+
+            let listItem = document.getElementById(`${desktop.id}hint`);
+
+            if(listItem) {
+
+              context._addDesktopMenuOptions(dropDown, listItem);
+              clearInterval(listLoadInterval);
+            }
+
+          }, 5); // Short interval because it's in the process of loading
+
+          clearInterval(menuDiscoverInterval);
+        }
+      }, 5); // Short interval because it's in the process of loading
+    }
+
+    public _mobileClickFunc(context) {
+      let menuDiscoverInterval = setInterval(() => {
+
+        let listLoad = document.querySelector('.ms-ContextualMenu-itemText');
+
+        if(listLoad) {
+
+          context._addMobileMenuOptions();
+          clearInterval(menuDiscoverInterval);
+        }
+      }, 5); // Short interval because it's in the process of loading
     }
 
     // Track when page resizes so we know if the layout has switched from mobile to desktop or vice versa
