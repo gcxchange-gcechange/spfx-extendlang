@@ -71,7 +71,7 @@ export default class ExtendLanguageApplicationCustomizer
           });
 
           desktop.addEventListener('keydown', function(e: KeyboardEvent) {
-            if (e.key === 'Enter'){
+            if (e.code === 'Enter' || e.code == 'NumpadEnter' || e.code == "Space") {
               context._desktopClickFunc(context);
             }
           });
@@ -91,7 +91,7 @@ export default class ExtendLanguageApplicationCustomizer
           });
 
           mobile.addEventListener('keydown', function(e: KeyboardEvent) {
-            if (e.key === 'Enter'){
+            if (e.code === 'Enter' || e.code == 'NumpadEnter' || e.code == "Space"){
               context._mobileClickFunc(context);
             }
           });
@@ -114,6 +114,13 @@ export default class ExtendLanguageApplicationCustomizer
             let listItem = document.getElementById(`${desktop.id}hint`);
 
             if(listItem) {
+
+              // Manually set focus on the first item in the list. 
+              // This fixes a strange bug in sharepoint where changing focus in this list via the arrow keys would automatically select items.
+              let item1 = document.getElementById(`${desktop.id}-list1`);
+              if(item1) {
+                item1.focus();
+              }
 
               context._addDesktopMenuOptions(dropDown, listItem);
               clearInterval(listLoadInterval);
@@ -167,8 +174,9 @@ export default class ExtendLanguageApplicationCustomizer
       const desktopId = "ProfileLangHeader";
 
       let exists = document.getElementById(desktopId);
-
+      
       if(!exists && languageList && languageListItem) {
+        
         // Change dropdown hint header
         languageListItem.children[0].innerHTML = strings.PageHeader;
         languageListItem.children[0].className = styles.boldItem;
