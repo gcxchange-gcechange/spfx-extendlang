@@ -122,7 +122,7 @@ export default class ExtendLanguageApplicationCustomizer
                 item1.focus();
               }
 
-              context._addDesktopMenuOptions(dropDown, listItem);
+              context._addDesktopMenuOptions(dropDown, listItem, item1);
               clearInterval(listLoadInterval);
             }
 
@@ -170,7 +170,7 @@ export default class ExtendLanguageApplicationCustomizer
       });
     }
 
-    public _addDesktopMenuOptions(languageList, languageListItem) {
+    public _addDesktopMenuOptions(languageList, languageListItem, listItem) {
       const desktopId = "ProfileLangHeader";
 
       let exists = document.getElementById(desktopId);
@@ -190,15 +190,32 @@ export default class ExtendLanguageApplicationCustomizer
         profileHeader.className = styles.dropDownHeader;
         profileHeader.id = desktopId;
 
+        var context = this;
+
+        var classes = "";
+        if (listItem.ariaSelected === "false") {
+          classes = listItem.getAttribute("class");
+        } else {
+          var itemNumber = listItem.id.slice(-1) == 1 ? 2 : 1;
+          var unselectedItem = document.getElementById(listItem.id.slice(0, -1) + itemNumber);
+          classes = unselectedItem.getAttribute("class");
+        }
+
         // grab classes from existing links / add them to our link for consistant style
-        let profileLink = document.createElement("a");
-        profileLink.setAttribute("href", this.URL);
+        let profileLink = document.createElement("button");
+        //profileLink.setAttribute("href", this.URL);
+        profileLink.classList.add("ms-Button");
+        profileLink.classList.add("ms-Button--action");
+        profileLink.classList.add("ms-Button--command");
+        profileLink.classList.add("ms-Dropdown-item");
+        profileLink.onclick = function() { location.href = context.URL };
         profileLink.innerText = strings.link;
         profileLink.className = styles.dropDownItem;
         profileLink.setAttribute("data-index", "1");
         profileLink.setAttribute("data-is-focusable", "true");
         profileLink.setAttribute("aria-posinset", "1");
         profileLink.setAttribute("aria-setsize", "1");
+        profileLink.setAttribute("class", classes);
 
         // List Group
         let listGroup = document.createElement("div");
