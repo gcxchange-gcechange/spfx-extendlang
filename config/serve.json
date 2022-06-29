@@ -9,7 +9,7 @@
         "2b0319cf-2fb2-4615-98dc-5aeda318c13a": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "testMessage": "Test message"
+            "siteIds": ""
           }
         }
       }
@@ -20,7 +20,7 @@
         "2b0319cf-2fb2-4615-98dc-5aeda318c13a": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "testMessage": "Test message"
+            "siteIds": ""
           }
         }
       }
