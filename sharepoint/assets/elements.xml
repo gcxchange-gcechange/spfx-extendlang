@@ -4,6 +4,6 @@
         Title="ExtendLanguage"
         Location="ClientSideExtension.ApplicationCustomizer"
         ClientSideComponentId="2b0319cf-2fb2-4615-98dc-5aeda318c13a"
-        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+        ClientSideComponentProperties="{&quot;siteIds&quot;:&quot;&quot;}">
     </CustomAction>
 </Elements>

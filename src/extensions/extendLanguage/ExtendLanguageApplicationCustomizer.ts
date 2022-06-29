@@ -16,7 +16,7 @@ import 'shepherd.js/dist/css/shepherd.css';
 import './components/shepherdStyleOverride.css';
 
 export interface IExtendLanguageApplicationCustomizerProperties {
-  testMessage: string;
+  siteIds: string;
 }
 
 export default class ExtendLanguageApplicationCustomizer
@@ -32,10 +32,9 @@ export default class ExtendLanguageApplicationCustomizer
     protected async onInit(): Promise<void> {
 
       await super.onInit();
-
+      
       if(this.context.pageContext.legacyPageContext.isHubSite || 
-      (this.context.pageContext.legacyPageContext.hubSiteId == "4719ca28-f27a-4595-a439-270badb1ae1f" || 
-      this.context.pageContext.legacyPageContext.hubSiteId == "225a8757-c7f4-4905-9456-7a3a951a87b6")) {
+        this.inSiteIds(this.context.pageContext.legacyPageContext.hubSiteId)) {
 
         try {
           const sp = await spfi().using(SPFx(this.context));
@@ -295,5 +294,14 @@ export default class ExtendLanguageApplicationCustomizer
         return true;
       }
       return null;
+    }
+
+    public inSiteIds(id) {
+      let ids = this.properties.siteIds.split(',');
+      for(let i = 0; i < ids.length; i++) {
+        if(id == ids[i].trim())
+          return true;
+      }
+      return false;
     }
 }
