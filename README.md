@@ -4,7 +4,7 @@
 
 Extend language select to add link to account language settings.
 
-Language toggles on Hub sites will be automatically be targeted by this extension. To target sub-sites of a hub site that also has language toggles, change the hubSiteId values on line 22 of [ExtendLanguageApplicationCustomizer](https://github.com/gcxchange-gcechange/spfx-extendlang/blob/main/src/extensions/extendLanguage/ExtendLanguageApplicationCustomizer.ts)
+Language toggles on Hub sites will be automatically be targeted by this extension. To target sub-sites of a hub site that also has language toggles, change the siteIds values in the extension properties.
 
 ## Deployment
 
@@ -34,3 +34,7 @@ spfx-extendlang is intended to be deployed **tenant wide**
 - in the command-line run:
   - **npm install**
   - **gulp serve**
+  
+ ## Adding and editing properties through SharePoint
+This extention pulls values from the extension properties defined on SharePoint. When deployed there are already some default values provided. You can edit these from the app catalog's tenant wide section. The properties follow JSON formatting, and each property is a string that needs to start and end in double quotations. The properties this extension needs to fuction properly are:
+- siteIds: A list of comma seperated GUIDs that represent the site Ids that this extension will be applied to (other than hub sites)
