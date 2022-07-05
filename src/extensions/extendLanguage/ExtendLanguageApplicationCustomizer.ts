@@ -25,14 +25,21 @@ export default class ExtendLanguageApplicationCustomizer
     tour: Tour = null;
     debounceTimeout: number = 200;
     lastResize: number = Date.now();
-    isMobile = null;
+    isMobile : boolean = null;
     URL: string = "https://myaccount.microsoft.com/settingsandprivacy/language";
+    initialized : boolean = false;
     
     @override
     protected async onInit(): Promise<void> {
 
       await super.onInit();
       
+      this.context.application.navigatedEvent.add(this, this._initialize);
+
+      return Promise.resolve();
+    }
+
+    public async _initialize() {
       if(this.context.pageContext.legacyPageContext.isHubSite || 
         this.inSiteIds(this.context.pageContext.legacyPageContext.hubSiteId)) {
 
@@ -45,8 +52,6 @@ export default class ExtendLanguageApplicationCustomizer
         this._setupResizeEvents();
         this._awaitDropDownLoad();
       }
-
-      return Promise.resolve();
     }
 
     // Setup events for the desktop/mobile language drop down
