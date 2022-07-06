@@ -27,7 +27,6 @@ export default class ExtendLanguageApplicationCustomizer
     lastResize: number = Date.now();
     isMobile : boolean = null;
     URL: string = "https://myaccount.microsoft.com/settingsandprivacy/language";
-    initialized : boolean = false;
     
     @override
     protected async onInit(): Promise<void> {
