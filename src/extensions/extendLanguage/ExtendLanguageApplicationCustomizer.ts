@@ -25,7 +25,7 @@ export default class ExtendLanguageApplicationCustomizer
     tour: Tour = null;
     debounceTimeout: number = 200;
     lastResize: number = Date.now();
-    isMobile = null;
+    isMobile:any = null;
     URL: string = "https://myaccount.microsoft.com/settingsandprivacy/language";
     
     @override
@@ -100,7 +100,7 @@ export default class ExtendLanguageApplicationCustomizer
       }, 10); // Short interval because it's in the process of loading
     }
 
-    public _desktopClickFunc(context) {
+    public _desktopClickFunc(context: any) {
       var desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
       let menuDiscoverInterval = setInterval(() => {
 
@@ -132,7 +132,7 @@ export default class ExtendLanguageApplicationCustomizer
       }, 5); // Short interval because it's in the process of loading
     }
 
-    public _mobileClickFunc(context) {
+    public _mobileClickFunc(context:any) {
       let menuDiscoverInterval = setInterval(() => {
 
         let listLoad = document.querySelector('.ms-ContextualMenu-itemText');
@@ -169,7 +169,7 @@ export default class ExtendLanguageApplicationCustomizer
       });
     }
 
-    public _addDesktopMenuOptions(languageList, languageListItem, listItem) {
+    public _addDesktopMenuOptions(languageList:any, languageListItem:any, listItem:any) {
       const desktopId = "ProfileLangHeader";
 
       let exists = document.getElementById(desktopId);
@@ -296,7 +296,7 @@ export default class ExtendLanguageApplicationCustomizer
       return null;
     }
 
-    public inSiteIds(id) {
+    public inSiteIds(id:any) {
       let ids = this.properties.siteIds.split(',');
       for(let i = 0; i < ids.length; i++) {
         if(id == ids[i].trim())
