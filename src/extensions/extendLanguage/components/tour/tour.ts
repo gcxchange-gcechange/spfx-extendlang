@@ -34,7 +34,7 @@ export default class Tour {
     this.addSteps();
   }
 
-  public startTour() {
+  public startTour():void {
     const context = this;
 
     setTimeout(() => {
@@ -59,13 +59,13 @@ export default class Tour {
     }, this.tourDelay);
   }
 
-  public stopTour() {
+  public stopTour():void {
     if (this.tour) {
       this.tour.cancel();
     }
   }
 
-  private addSteps() {
+  private addSteps():void {
     const context = this;
 
     // Step 1
@@ -76,7 +76,7 @@ export default class Tour {
         : "Bienvenue dans GCéchange"),
       text: context.english === null ? strings.step1body 
       : (context.english 
-        ? "Welcome! Before we get started, let\'s make sure your language preferences are setup correctly." 
+        ? "Welcome! Before we get started, let's make sure your language preferences are setup correctly." 
         : "Bienvenue! Avant de commencer, assurez-vous que vos préférences linguistiques sont bien configurées."),
       attachTo: {
         element: this.target,
@@ -110,7 +110,7 @@ export default class Tour {
         : "Paramètres linguistiques"),
       text: context.english === null ? strings.step2body 
       : (context.english 
-        ? "To change the <b>page language</b>, pick English or French. The language of headings and menus in GCXchange can only be changed in your M365 Account\'s <b>language & region</b> settings. For more information, visit our <a href=\"https://gcxchange.sharepoint.com/sites/Support/SitePages/FAQ.aspx\">FAQ<a/>" 
+        ? "To change the <b>page language</b>, pick English or French. The language of headings and menus in GCXchange can only be changed in your M365 Account's <b>language & region</b> settings. For more information, visit our <a href=\"https://gcxchange.sharepoint.com/sites/Support/SitePages/FAQ.aspx\">FAQ<a/>" 
         : "Pour changer la <b>langue de la page</b>, choisissez « anglais » ou « français ». La langue des en têtes et des menus dans GCéchange ne peut être modifiée que dans les paramètres de <b>langue et de région</b> de votre compte MS365. Pour en savoir plus, consultez notre <a href=\"https://gcxchange.sharepoint.com/sites/Support/SitePages/fr/FAQ.aspx\">FAQ</a>."),
       attachTo: {
         element: this.target,
@@ -188,7 +188,7 @@ export default class Tour {
         : "Bonne visite!"),
       text: context.english === null ? strings.step3body 
       : (context.english 
-        ? "That\'s all for now! We hope you enjoy using GCXchange. Feel free to press the back button to go to any previous steps you may have skipped." 
+        ? "That's all for now! We hope you enjoy using GCXchange. Feel free to press the back button to go to any previous steps you may have skipped." 
         : "C’est tout pour le moment. Nous espérons que vous aimerez utiliser GCéchange. N’hésitez pas à utiliser le bouton de retour en arrière pour revenir aux étapes précédentes que vous avez peut-être sautées."),
       attachTo: {
         element: null, 
@@ -218,7 +218,7 @@ export default class Tour {
     });
   }
 
-  private copyDropDown() {
+  private copyDropDown():void {
     setTimeout(() => {
 
       if(this.dropDownCopy) {
@@ -252,7 +252,7 @@ export default class Tour {
     }, this.stepDelay);
   }
 
-  private cleanupDropDown() {
+  private cleanupDropDown():void {
     if (this.dropDownCopy)
       this.dropDownCopy.remove();
 
@@ -260,7 +260,7 @@ export default class Tour {
       clearInterval(this.dropDownInterval);
   }
 
-  private hideAccessibility(selector: any) {
+  private hideAccessibility(selector: any):void {
     if (selector) {
       const element: any = document.querySelector(selector);
       if (element) {
@@ -270,7 +270,7 @@ export default class Tour {
     }
   }
 
-  private handleEndTour() {
+  private handleEndTour():void {
     const element: any = document.querySelector("div[class^='SPPage']");
     if (element) {
       element.ariaHidden = "false";
@@ -278,7 +278,7 @@ export default class Tour {
     }
   }
 
-  private urlParamExists() {
+  private urlParamExists():boolean {
     const param = window.location.href.split('gcxLangTour')[1];
     if (param) {
       return true;
@@ -286,7 +286,7 @@ export default class Tour {
     return false;
   }
 
-  private isEnglish() {
+  private isEnglish():boolean {
     if(this.urlParamExists()) {
       if(window.location.href.indexOf('gcxLangTour=en') > -1) {
         return true;
@@ -298,7 +298,7 @@ export default class Tour {
     return null;
   }
 
-  private cleanseUrl() {
+  private cleanseUrl():void {
     if (this.urlParamExists()) {
 
       const newUrl: string = window.location.href.replace('gcxLangTour&', '').replace('&gcxLangTour', '').replace('gcxLangTour', '');

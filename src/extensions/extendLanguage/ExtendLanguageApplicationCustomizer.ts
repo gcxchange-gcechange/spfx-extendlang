@@ -152,6 +152,7 @@ export default class ExtendLanguageApplicationCustomizer
     // If the layout has changed we need to rebind our events
     public _setupResizeEvents():void {
       const context = this;
+      console.log("Contest",context)
 
       window.addEventListener('resize', function() {
         const now = Date.now();
@@ -289,7 +290,7 @@ export default class ExtendLanguageApplicationCustomizer
       this.URL = "https://myaccount.microsoft.com/settingsandprivacy/language/?ref=MeControl&login_hint=" + userPrincipalName + "&tid=" + tenantId;
     }
 
-    public _isMobile():any {
+    public _isMobile():boolean {
       if(document.querySelector('[data-automation-id="LanguageSelector"]')) {
         return false;
       }
@@ -299,10 +300,10 @@ export default class ExtendLanguageApplicationCustomizer
       return null;
     }
 
-    public inSiteIds(id:any):any {
+    public inSiteIds(id:any):boolean {
       const ids = this.properties.siteIds.split(',');
       for(let i = 0; i < ids.length; i++) {
-        if(id == ids[i].trim())
+        if(String(id) === ids[i].trim())
           return true;
       }
       return false;

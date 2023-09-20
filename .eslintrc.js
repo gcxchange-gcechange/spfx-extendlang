@@ -21,6 +21,9 @@ module.exports = {
         // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
         '@typescript-eslint/adjacent-overload-signatures': 1,
         // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
+            // Override the @typescript-eslint/no-this-alias rule
+        '@typescript-eslint/no-this-alias': 0, // Disable the rule
+
         //
         // CONFIGURATION:     By default, these are banned: String, Boolean, Number, Object, Symbol
         '@typescript-eslint/ban-types': [
