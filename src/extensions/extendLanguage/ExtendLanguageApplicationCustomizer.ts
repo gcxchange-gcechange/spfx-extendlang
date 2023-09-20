@@ -40,7 +40,9 @@ export default class ExtendLanguageApplicationCustomizer
           const sp = await spfi().using(SPFx(this.context));
           const user = await sp.web.currentUser();
           this.createURL(this.context.pageContext.aadInfo.tenantId._guid, encodeURIComponent(user.UserPrincipalName));
-        } catch (e) {}
+        } catch (e) {
+          console.log("Error:",e)
+        }
         
         this._setupResizeEvents();
         this._awaitDropDownLoad();
@@ -49,8 +51,9 @@ export default class ExtendLanguageApplicationCustomizer
       return Promise.resolve();
     }
 
+
     // Setup events for the desktop/mobile language drop down
-    public _awaitDropDownLoad() {
+    public _awaitDropDownLoad():void {
       const context = this;
       const masterInterval = setInterval(() => {
 
@@ -70,7 +73,7 @@ export default class ExtendLanguageApplicationCustomizer
           });
 
           desktop.addEventListener('keydown', function(e: KeyboardEvent) {
-            if (e.code === 'Enter' || e.code == 'NumpadEnter' || e.code == "Space") {
+            if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === "Space") {
               context._desktopClickFunc(context);
             }
           });
@@ -90,7 +93,7 @@ export default class ExtendLanguageApplicationCustomizer
           });
 
           mobile.addEventListener('keydown', function(e: KeyboardEvent) {
-            if (e.code === 'Enter' || e.code == 'NumpadEnter' || e.code == "Space"){
+            if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === "Space"){
               context._mobileClickFunc(context);
             }
           });
@@ -100,7 +103,7 @@ export default class ExtendLanguageApplicationCustomizer
       }, 10); // Short interval because it's in the process of loading
     }
 
-    public _desktopClickFunc(context: any) {
+    public _desktopClickFunc(context: any):void {
       const desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
       const menuDiscoverInterval = setInterval(() => {
 
@@ -132,7 +135,7 @@ export default class ExtendLanguageApplicationCustomizer
       }, 5); // Short interval because it's in the process of loading
     }
 
-    public _mobileClickFunc(context:any) {
+    public _mobileClickFunc(context:any):void {
       const menuDiscoverInterval = setInterval(() => {
 
         const listLoad = document.querySelector('.ms-ContextualMenu-itemText');
@@ -147,7 +150,7 @@ export default class ExtendLanguageApplicationCustomizer
 
     // Track when page resizes so we know if the layout has switched from mobile to desktop or vice versa
     // If the layout has changed we need to rebind our events
-    public _setupResizeEvents() {
+    public _setupResizeEvents():void {
       const context = this;
 
       window.addEventListener('resize', function() {
@@ -169,7 +172,7 @@ export default class ExtendLanguageApplicationCustomizer
       });
     }
 
-    public _addDesktopMenuOptions(languageList:any, languageListItem:any, listItem:any) {
+    public _addDesktopMenuOptions(languageList:any, languageListItem:any, listItem:any):void {
       const desktopId = "ProfileLangHeader";
 
       const exists = document.getElementById(desktopId);
@@ -195,7 +198,7 @@ export default class ExtendLanguageApplicationCustomizer
         if (listItem.ariaSelected === "false") {
           classes = listItem.getAttribute("class");
         } else {
-          const itemNumber = listItem.id.slice(-1) == 1 ? 2 : 1;
+          const itemNumber = listItem.id.slice(-1) === 1 ? 2 : 1;
           const unselectedItem = document.getElementById(listItem.id.slice(0, -1) + itemNumber);
           classes = unselectedItem.getAttribute("class");
         }
@@ -228,7 +231,7 @@ export default class ExtendLanguageApplicationCustomizer
       }
     }
 
-    public _addMobileMenuOptions() {
+    public _addMobileMenuOptions():void {
       const mobileId = "gcx-gce-langauge-extension-mobile-list";
 
       const list = document.getElementsByClassName('ms-ContextualMenu-list');
@@ -282,11 +285,11 @@ export default class ExtendLanguageApplicationCustomizer
       }
     }
 
-    public createURL(tenantId: string, userPrincipalName: string) {
+    public createURL(tenantId: string, userPrincipalName: string):void {
       this.URL = "https://myaccount.microsoft.com/settingsandprivacy/language/?ref=MeControl&login_hint=" + userPrincipalName + "&tid=" + tenantId;
     }
 
-    public _isMobile() {
+    public _isMobile():any {
       if(document.querySelector('[data-automation-id="LanguageSelector"]')) {
         return false;
       }
@@ -296,7 +299,7 @@ export default class ExtendLanguageApplicationCustomizer
       return null;
     }
 
-    public inSiteIds(id:any) {
+    public inSiteIds(id:any):any {
       const ids = this.properties.siteIds.split(',');
       for(let i = 0; i < ids.length; i++) {
         if(id == ids[i].trim())
