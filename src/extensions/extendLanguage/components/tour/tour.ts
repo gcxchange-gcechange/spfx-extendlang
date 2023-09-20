@@ -35,7 +35,7 @@ export default class Tour {
   }
 
   public startTour() {
-    let context = this;
+    const context = this;
 
     setTimeout(() => {
       if (!this.urlParamExists() || document.querySelector('.shepherd-content')) {
@@ -66,7 +66,7 @@ export default class Tour {
   }
 
   private addSteps() {
-    let context = this;
+    const context = this;
 
     // Step 1
     this.tour.addStep({
@@ -229,13 +229,13 @@ export default class Tour {
       this.target.click();
 
       this.dropDownInterval = setInterval(() => {
-        let dropdDown = document.querySelector('.ms-Layer--fixed');
+        const dropdDown = document.querySelector('.ms-Layer--fixed');
 
         if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
 
           dropdDown.id = 'gcx-tour-dropdown';
         
-          let actions = dropdDown.querySelectorAll('button, a');
+          const actions = dropdDown.querySelectorAll('button, a');
           actions.forEach(element => {
             (element as HTMLElement).style.pointerEvents = 'none';
           });
@@ -262,7 +262,7 @@ export default class Tour {
 
   private hideAccessibility(selector: any) {
     if (selector) {
-      let element: any = document.querySelector(selector);
+      const element: any = document.querySelector(selector);
       if (element) {
         element.ariaHidden = "true";
         element.tabIndex = -1;
@@ -271,7 +271,7 @@ export default class Tour {
   }
 
   private handleEndTour() {
-    let element: any = document.querySelector("div[class^='SPPage']");
+    const element: any = document.querySelector("div[class^='SPPage']");
     if (element) {
       element.ariaHidden = "false";
       element.removeAttribute('tabIndex');
@@ -279,7 +279,7 @@ export default class Tour {
   }
 
   private urlParamExists() {
-    let param = window.location.href.split('gcxLangTour')[1];
+    const param = window.location.href.split('gcxLangTour')[1];
     if (param) {
       return true;
     }
@@ -301,7 +301,7 @@ export default class Tour {
   private cleanseUrl() {
     if (this.urlParamExists()) {
 
-      let newUrl: string = window.location.href.replace('gcxLangTour&', '').replace('&gcxLangTour', '').replace('gcxLangTour', '');
+      const newUrl: string = window.location.href.replace('gcxLangTour&', '').replace('&gcxLangTour', '').replace('gcxLangTour', '');
       const newState: any = { additionalInformation: 'Updated the URL after the tour.' };
       const newTitle: string = "Home - Home";
 
