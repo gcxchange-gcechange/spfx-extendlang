@@ -6,6 +6,8 @@ Extend language select to add link to account language settings.
 
 Language toggles on Hub sites will be automatically be targeted by this extension. To target sub-sites of a hub site that also has language toggles, change the siteIds values in the extension properties.
 
+When a user visit first time to the site, The tour will be displays.
+
 #### Language Toggle
 ![Language Toggle Preview](sharepoint/assets/lang-ext.png)
 #### Tour
