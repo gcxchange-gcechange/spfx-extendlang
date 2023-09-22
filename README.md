@@ -2,14 +2,14 @@
 
 ## Summary
 
-Short description of what the webpart do. Give the basic information and feature of the app. 
+Extend language select to add link to account language settings.
 
-_Adding a visualisation is possible. Need to keep in mind that it should only reflect what is provide in the short description. Plus, an short description of the image or animation need to be provide in the alt._
+Language toggles on Hub sites will be automatically be targeted by this extension. To target sub-sites of a hub site that also has language toggles, change the siteIds values in the extension properties.
+
 
 ## Prerequisites
 
-This web part connects to [this function app](https://github.com/gcxchange-gcechange/appsvc-fnc-dev-userstats).
-
+None
 ## API permission
 List of api permission that need to be approve by a sharepoint admin.
 

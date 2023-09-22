@@ -6,6 +6,13 @@ Extend language select to add link to account language settings.
 
 Language toggles on Hub sites will be automatically be targeted by this extension. To target sub-sites of a hub site that also has language toggles, change the siteIds values in the extension properties.
 
+#### Language Toggle
+![Language Toggle Preview](sharepoint/assets/lang-ext.png)
+#### Tour
+![Preview of Tour](sharepoint/assets/lng-ext-tour1.png)
+![Preview of Tour](sharepoint/assets/lng-ext-tour2.png)
+![Preview of Tour](sharepoint/assets/lng-ext-tour3.png)
+
 ## Deployment
 
 spfx-extendlang is intended to be deployed **tenant wide**
