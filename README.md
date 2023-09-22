@@ -1,18 +1,25 @@
-# spfx-extend-lang
+# Name of the application
 
 ## Summary
 
-Extend language select to add link to account language settings.
+Short description of what the webpart do. Give the basic information and feature of the app. 
 
-Language toggles on Hub sites will be automatically be targeted by this extension. To target sub-sites of a hub site that also has language toggles, change the siteIds values in the extension properties.
+_Adding a visualisation is possible. Need to keep in mind that it should only reflect what is provide in the short description. Plus, an short description of the image or animation need to be provide in the alt._
 
-## Deployment
+## Prerequisites
 
-spfx-extendlang is intended to be deployed **tenant wide**
+This web part connects to [this function app](https://github.com/gcxchange-gcechange/appsvc-fnc-dev-userstats).
 
-## Used SharePoint Framework Version
+## API permission
+List of api permission that need to be approve by a sharepoint admin.
 
-![version](https://img.shields.io/badge/version-1.11-green.svg)
+## Version 
+
+Used SharePoint Framework Webpart or Sharepoint Framework Extension 
+
+![SPFx 1.11](https://img.shields.io/badge/SPFx-1.11-green.svg)
+
+![Node.js v10](https://img.shields.io/badge/Node.js-10.22.0-green.svg)
 
 ## Applies to
 
@@ -21,20 +28,30 @@ spfx-extendlang is intended to be deployed **tenant wide**
 
 > Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
 
-## Disclaimer
+## Version history
 
-**THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
-
----
+Version|Date|Comments
+-------|----|--------
+1.0|Dec 9, 2021|Initial release
+1.1|March 25, 2022|Next release
 
 ## Minimal Path to Awesome
 
 - Clone this repository
 - Ensure that you are at the solution folder
-- in the command-line run:
+- In the command-line run:
   - **npm install**
   - **gulp serve**
-  
- ## Adding and editing properties through SharePoint
-This extention pulls values from the extension properties defined on SharePoint. When deployed there are already some default values provided. You can edit these from the app catalog's tenant wide section. The properties follow JSON formatting, and each property is a string that needs to start and end in double quotations. The properties this extension needs to fuction properly are:
-- siteIds: A list of comma seperated GUIDs that represent the site Ids that this extension will be applied to (other than hub sites)
+- You will need to add your client id and azure function to the `clientId` and `url` classs members at the top of the filename.tsx file.
+- To debug in the front end:
+  - go to the `serve.json` file and update `initialPage` to `https://domain-name.sharepoint.com/_layouts/15/workbench.aspx`
+  - Run the command **gulp serve**
+- To deploy: in the command-line run
+  - **gulp bundle --ship**
+  - **gulp package-solution --ship**
+- Add the webpart to your tenant app store
+- Approve the web API permissions
+
+## Disclaimer
+
+**THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
