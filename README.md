@@ -40,20 +40,20 @@ Version|Date|Comments
 - Clone this repository
 - Ensure that you are at the solution folder
 - Ensure the current version of the Node.js (16.3+)
-  - in the command-line run:
-    - **npm install
+  - **in the command-line run:**
+    - **npm install**
 - To debug
   - go to the `spfx-extendlang\config\serve.json` file and update `pageUrl` to any url of hubsite
-  - in the command-line run:
+  - **in the command-line run:**
     - **gulp clean**
     - **gulp serve**
 - To deploy: 
-  - in the command-line run
+  - **in the command-line run:**
     - **gulp clean**
     - **gulp bundle --ship**
     - **gulp package-solution --ship**
-        
-- Add the webpart to your tenant app store
+
+- Upload the extension from `\sharepoint\solution` to your tenant app store
 ## Disclaimer
 
 **THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
