@@ -56,6 +56,11 @@ Version|Date|Comments
     - **gulp package-solution --ship**
 
 - Upload the extension from `\sharepoint\solution` to your tenant app store
+- To add or modify extension property called siteIds
+  - **Go to Modern Appcatalog**
+  - **Click ...More features in the left side**
+  - **Open the tenant wide Extension**
+  - **Edit the siteIds under the title called ExtendLanguage**
 
 ## Disclaimer
 
