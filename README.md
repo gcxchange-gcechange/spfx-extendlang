@@ -36,7 +36,7 @@ Version|Date|Comments
 -------|----|--------
 1.0|Sept 24, 2021|Initial release
 1.0.1  | Jun 29, 2022 | Siteids added as extension property
-1.0.1  | Sept 23, 2023 | Upgraded to SPFX 1.17.4
+1.0.2  | Sept 23, 2023 | Upgraded to SPFX 1.17.4
 
 ## Minimal Path to Awesome
 - Clone this repository
