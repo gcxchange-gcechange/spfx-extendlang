@@ -122,23 +122,22 @@ export default class ExtendLanguageApplicationCustomizer
               // }
 
               context._addDesktopMenuOptions(dropDown, listItem, item1);
-            let element: any = document.querySelector("div[class^='dropdownItemsWrapper']");
-            if (element) {
-            element.ariaHidden = "true";
-            element.tabIndex = -1;
-             }
-             let element2: any = document.querySelector("div[data-shepherd-step-id='step2']");
-            if (element2) {
-            element2.focus()
-             }
+            // let element: any = document.querySelector("div[class^='dropdownItemsWrapper']");
+            // if (element) {
+            // element.ariaHidden = "true";
+            // element.tabIndex = -1;
+            //  }
+            
+             
               clearInterval(listLoadInterval);
             }
 
           }, 5); // Short interval because it's in the process of loading
-
+          
           clearInterval(menuDiscoverInterval);
         }
       }, 5); // Short interval because it's in the process of loading
+      
     }
 
     public _mobileClickFunc(context) {

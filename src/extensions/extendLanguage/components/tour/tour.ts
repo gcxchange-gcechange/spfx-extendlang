@@ -227,6 +227,7 @@ export default class Tour {
         return;
       }
 
+      debugger;
       this.target.click();
 
       this.dropDownInterval = setInterval(() => {
@@ -250,7 +251,10 @@ export default class Tour {
         }
       }, 10);
 
+      this.addAccessibility()
+
     }, this.stepDelay);
+
   }
 
   private cleanupDropDown() {
@@ -260,6 +264,12 @@ export default class Tour {
     if (this.dropDownInterval)
       clearInterval(this.dropDownInterval);
   }
+  private addAccessibility() {
+  let element2: any = document.querySelector("div[data-shepherd-step-id='step2']");
+          if (element2) {
+          element2.click()
+           }
+        }
 
   private hideAccessibility(selector: any) {
     if (selector) {
