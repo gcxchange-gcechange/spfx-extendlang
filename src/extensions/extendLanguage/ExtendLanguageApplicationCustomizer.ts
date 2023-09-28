@@ -122,12 +122,15 @@ export default class ExtendLanguageApplicationCustomizer
               // }
 
               context._addDesktopMenuOptions(dropDown, listItem, item1);
-              let element: any = document.querySelector("div[class^='dropdownItemsWrapper']");
+            let element: any = document.querySelector("div[class^='dropdownItemsWrapper']");
             if (element) {
             element.ariaHidden = "true";
             element.tabIndex = -1;
              }
-
+             let element2: any = document.querySelector("div[data-shepherd-step-id='step2']");
+            if (element2) {
+            element2.focus()
+             }
               clearInterval(listLoadInterval);
             }
 
