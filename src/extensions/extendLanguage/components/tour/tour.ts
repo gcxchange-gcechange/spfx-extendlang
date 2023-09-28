@@ -45,7 +45,6 @@ export default class Tour {
       this.tour.start();
       this.cleanseUrl();
       this.hideAccessibility("div[class^='SPPage']");
-      this.hideAccessibility("div[class^='dropdownItemsWrapper']");
 
 
       this.tour.on("cancel", () => {
