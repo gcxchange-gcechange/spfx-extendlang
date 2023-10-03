@@ -122,13 +122,8 @@ export default class ExtendLanguageApplicationCustomizer
               // }
 
               context._addDesktopMenuOptions(dropDown, listItem, item1);
-            // let element: any = document.querySelector("div[class^='dropdownItemsWrapper']");
-            // if (element) {
-            // element.ariaHidden = "true";
-            // element.tabIndex = -1;
-            //  }
             
-             
+      
               clearInterval(listLoadInterval);
             }
 
