@@ -219,18 +219,22 @@ export default class Tour {
     });
   }
 
+  
   private copyDropDown() {
     setTimeout(() => {
 
       if(this.dropDownCopy) {
         document.body.appendChild(this.dropDownCopy);
+        console.log("dropDownCopy Exists");
         return;
+
       }
 
-      debugger;
       this.target.click();
 
       this.dropDownInterval = setInterval(() => {
+        console.log("dropDownCopy Not Exists");
+
         let dropdDown = document.querySelector('.ms-Layer--fixed');
 
         if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
@@ -251,25 +255,29 @@ export default class Tour {
         }
       }, 10);
 
-      this.addAccessibility()
+      //this.addAccessibility()
 
     }, this.stepDelay);
-
   }
 
   private cleanupDropDown() {
     if (this.dropDownCopy)
+    {
       this.dropDownCopy.remove();
+      console.log("Dropdown Removed");
+    }
 
-    if (this.dropDownInterval)
+    if (this.dropDownInterval){
       clearInterval(this.dropDownInterval);
+      console.log("dropDownInterval Removed");
+    }
   }
-  private addAccessibility() {
-  let element2: any = document.querySelector("div[data-shepherd-step-id='step2']");
-          if (element2) {
-          element2.click()
-           }
-        }
+  // private addAccessibility() {
+  // let element2: any = document.querySelector("div[data-shepherd-step-id='step2']");
+  //         if (element2) {
+  //         element2.click()
+  //          }
+  //       }
 
   private hideAccessibility(selector: any) {
     if (selector) {
