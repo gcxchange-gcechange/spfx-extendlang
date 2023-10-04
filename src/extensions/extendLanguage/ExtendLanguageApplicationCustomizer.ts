@@ -117,9 +117,9 @@ export default class ExtendLanguageApplicationCustomizer
               // Manually set focus on the first item in the list. 
               // This fixes a strange bug in sharepoint where changing focus in this list via the arrow keys would automatically select items.
               let item1 = document.getElementById(`${desktop.id}-list1`);
-              if(item1) {
-                item1.focus();
-              }
+              // if(item1) {
+              //   item1.focus();
+              // }
 
               context._addDesktopMenuOptions(dropDown, listItem, item1);
               clearInterval(listLoadInterval);
