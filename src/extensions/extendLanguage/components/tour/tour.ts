@@ -87,7 +87,7 @@ export default class Tour {
           action() {
             if(!context.isMobile)
             context.preCopyDropDown()
-              context.copyDropDown();
+            context.copyDropDown();
 
             return this.next();
           },
@@ -258,28 +258,28 @@ export default class Tour {
         return;
       }
 
-      // this.target.click();
+      this.target.click();
 
-      // this.dropDownInterval = setInterval(() => {
-      //   let dropdDown = document.querySelector('.ms-Layer--fixed');
+      this.dropDownInterval = setInterval(() => {
+        let dropdDown = document.querySelector('.ms-Layer--fixed');
 
-      //   if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
+        if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
 
-      //     dropdDown.id = 'gcx-tour-dropdown';
+          dropdDown.id = 'gcx-tour-dropdown';
         
-      //     let actions = dropdDown.querySelectorAll('button, a');
-      //     actions.forEach(element => {
-      //       (element as HTMLElement).style.pointerEvents = 'none';
-      //     });
+          let actions = dropdDown.querySelectorAll('button, a');
+          actions.forEach(element => {
+            (element as HTMLElement).style.pointerEvents = 'none';
+          });
 
-      //     this.dropDownCopy = dropdDown.cloneNode(true);
+          this.dropDownCopy = dropdDown.cloneNode(true);
 
-      //     document.body.appendChild(this.dropDownCopy);
-      //     //this.dropdDown.remove();
+          document.body.appendChild(this.dropDownCopy);
+          //this.dropdDown.remove();
 
-      //     clearInterval(this.dropDownInterval);
-      //   }
-      // }, 10);
+          clearInterval(this.dropDownInterval);
+        }
+      }, 10);
 
     }, this.stepDelay);
   }
