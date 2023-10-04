@@ -4,7 +4,7 @@
 
 Extend language select to add link to account language settings.
 
-Language toggles on Hub sites will be automatically be targeted by this extension. To target sub-sites of a hub site that also has language toggles, change the siteIds values in the extension properties. This extension is intended to be deployed tenant wide. When the ***gcxLangTour*** parameter triggers in the URL, a tour about the extension will be displayed.
+Language toggles on Hub sites will be automatically be targeted by this extension. To target sub-sites of a hub site that also has language toggles, change the siteIds values in the extension properties. This extension is intended to be deployed tenant wide. Pls change to this: When "gcxLangTour=" is add to the url with "en" or "fr" it trigger the tour feature in the chosen language. The tour feature shows to the user the different option in the language dropdown.
 
 This extention pulls values from the extension properties defined on SharePoint. When deployed there are already some default values provided. You can edit these from the app catalog's tenant wide section. The properties follow JSON formatting, and each property is a string that needs to start and end in double quotations. The property used in this extension is siteIds that is a list of comma separeated GUIDs that represent the site Ids that this extension will be applied to (other than hub sites)
 
