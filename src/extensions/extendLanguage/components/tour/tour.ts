@@ -87,7 +87,7 @@ export default class Tour {
           action() {
             if(!context.isMobile)
             context.preCopyDropDown()
-            context.copyDropDown();
+            //context.copyDropDown();
 
             return this.next();
           },
@@ -111,7 +111,7 @@ export default class Tour {
         : "Paramètres linguistiques"),
       text: context.english === null ? strings.step2body 
       : (context.english 
-        ? "To change the <b>page language</b>, pick English or French. The language of headings and menus in GCXchange can only be changed in your M365 Account\'s <b>language & region</b> settings. For more information, visit our <a href=\"https://gcxchange.sharepoint.com/sites/Support/SitePages/FAQ.aspx\">FAQ<a/>" 
+        ? "To change the <b>page language</b>, pick English or French. The language of headings and menus in GCXchange can only be changed in your MS365 Account\'s <b>language & region</b> settings. For more information, visit our <a href=\"https://gcxchange.sharepoint.com/sites/Support/SitePages/FAQ.aspx\">FAQ<a/>" 
         : "Pour changer la <b>langue de la page</b>, choisissez « anglais » ou « français ». La langue des en têtes et des menus dans GCéchange ne peut être modifiée que dans les paramètres de <b>langue et de région</b> de votre compte MS365. Pour en savoir plus, consultez notre <a href=\"https://gcxchange.sharepoint.com/sites/Support/SitePages/fr/FAQ.aspx\">FAQ</a>."),
       attachTo: {
         element: this.target,
@@ -209,7 +209,7 @@ export default class Tour {
         },
         {
           action() {
-            return this.next();
+            return context.tour.complete();
           },
           text: context.english === null ? strings.done : (context.english ? "Done" : "Sortir"),
           label: context.english === null ? strings.done : (context.english ? "Done" : "Sortir")
@@ -247,8 +247,7 @@ export default class Tour {
             element.setAttribute("aria-hidden", "true");
             element.tabIndex = -1;
              }
-
-  }
+ }
 
   private copyDropDown() {
     setTimeout(() => {
@@ -258,6 +257,7 @@ export default class Tour {
         return;
       }
 
+      else{
       this.target.click();
 
       this.dropDownInterval = setInterval(() => {
@@ -280,7 +280,7 @@ export default class Tour {
           clearInterval(this.dropDownInterval);
         }
       }, 10);
-
+      }
     }, this.stepDelay);
   }
 
