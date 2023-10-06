@@ -25,7 +25,7 @@ export default class ExtendLanguageApplicationCustomizer
     tour: Tour = null;
     debounceTimeout: number = 200;
     lastResize: number = Date.now();
-    isMobile = null;
+    isMobile:any = null;
     URL: string = "https://myaccount.microsoft.com/settingsandprivacy/language";
     
     @override
@@ -38,9 +38,11 @@ export default class ExtendLanguageApplicationCustomizer
 
         try {
           const sp = await spfi().using(SPFx(this.context));
-          let user = await sp.web.currentUser();
+          const user = await sp.web.currentUser();
           this.createURL(this.context.pageContext.aadInfo.tenantId._guid, encodeURIComponent(user.UserPrincipalName));
-        } catch (e) {}
+        } catch (e) {
+          console.log("Error:",e)
+        }
         
         this._setupResizeEvents();
         this._awaitDropDownLoad();
@@ -49,13 +51,14 @@ export default class ExtendLanguageApplicationCustomizer
       return Promise.resolve();
     }
 
-    // Setup events for the desktop/mobile language drop down
-    public _awaitDropDownLoad() {
-      let context = this;
-      let masterInterval = setInterval(() => {
 
-        var desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
-        var mobile = document.querySelector('[class^="moreActionsButton-"] button');
+    // Setup events for the desktop/mobile language drop down
+    public _awaitDropDownLoad():void {
+      const context = this;
+      const masterInterval = setInterval(() => {
+
+        const desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
+        const mobile = document.querySelector('[class^="moreActionsButton-"] button');
 
         if(desktop) {
           this.isMobile = false;
@@ -70,7 +73,7 @@ export default class ExtendLanguageApplicationCustomizer
           });
 
           desktop.addEventListener('keydown', function(e: KeyboardEvent) {
-            if (e.code === 'Enter' || e.code == 'NumpadEnter' || e.code == "Space") {
+            if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === "Space") {
               context._desktopClickFunc(context);
             }
           });
@@ -90,7 +93,7 @@ export default class ExtendLanguageApplicationCustomizer
           });
 
           mobile.addEventListener('keydown', function(e: KeyboardEvent) {
-            if (e.code === 'Enter' || e.code == 'NumpadEnter' || e.code == "Space"){
+            if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === "Space"){
               context._mobileClickFunc(context);
             }
           });
@@ -100,23 +103,23 @@ export default class ExtendLanguageApplicationCustomizer
       }, 10); // Short interval because it's in the process of loading
     }
 
-    public _desktopClickFunc(context) {
-      var desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
-      let menuDiscoverInterval = setInterval(() => {
+    public _desktopClickFunc(context: any):void {
+      const desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
+      const menuDiscoverInterval = setInterval(() => {
 
-        let dropDown = document.getElementById(`${desktop.id}-list`);
+        const dropDown = document.getElementById(`${desktop.id}-list`);
 
         if(dropDown) {
 
-          let listLoadInterval = setInterval(() => {
+          const listLoadInterval = setInterval(() => {
 
-            let listItem = document.getElementById(`${desktop.id}hint`);
+            const listItem = document.getElementById(`${desktop.id}hint`);
 
             if(listItem) {
 
               // Manually set focus on the first item in the list. 
               // This fixes a strange bug in sharepoint where changing focus in this list via the arrow keys would automatically select items.
-              let item1 = document.getElementById(`${desktop.id}-list1`);
+              const item1 = document.getElementById(`${desktop.id}-list1`);
               if(item1) {
                 item1.focus();
               }
@@ -132,10 +135,10 @@ export default class ExtendLanguageApplicationCustomizer
       }, 5); // Short interval because it's in the process of loading
     }
 
-    public _mobileClickFunc(context) {
-      let menuDiscoverInterval = setInterval(() => {
+    public _mobileClickFunc(context:any):void {
+      const menuDiscoverInterval = setInterval(() => {
 
-        let listLoad = document.querySelector('.ms-ContextualMenu-itemText');
+        const listLoad = document.querySelector('.ms-ContextualMenu-itemText');
 
         if(listLoad) {
 
@@ -147,14 +150,15 @@ export default class ExtendLanguageApplicationCustomizer
 
     // Track when page resizes so we know if the layout has switched from mobile to desktop or vice versa
     // If the layout has changed we need to rebind our events
-    public _setupResizeEvents() {
-      let context = this;
+    public _setupResizeEvents():void {
+      const context = this;
+      console.log("Contest",context)
 
       window.addEventListener('resize', function() {
-        let now = Date.now();
+        const now = Date.now();
         if(now >= context.lastResize + context.debounceTimeout) {
         
-          let newLayoutState = context._isMobile();
+          const newLayoutState = context._isMobile();
         
           if(newLayoutState !== context.isMobile) {
             if(context.tour)
@@ -169,10 +173,10 @@ export default class ExtendLanguageApplicationCustomizer
       });
     }
 
-    public _addDesktopMenuOptions(languageList, languageListItem, listItem) {
+    public _addDesktopMenuOptions(languageList:any, languageListItem:any, listItem:any):void {
       const desktopId = "ProfileLangHeader";
 
-      let exists = document.getElementById(desktopId);
+      const exists = document.getElementById(desktopId);
       
       if(!exists && languageList && languageListItem) {
         
@@ -184,24 +188,24 @@ export default class ExtendLanguageApplicationCustomizer
         languageList.setAttribute("aria-live", "polite");
 
         // Dropdown heading
-        let profileHeader = document.createElement("div");
+        const profileHeader = document.createElement("div");
         profileHeader.innerText = strings.header;
         profileHeader.className = styles.dropDownHeader;
         profileHeader.id = desktopId;
 
-        var context = this;
+        const context = this;
 
-        var classes = "";
+        let classes = "";
         if (listItem.ariaSelected === "false") {
           classes = listItem.getAttribute("class");
         } else {
-          var itemNumber = listItem.id.slice(-1) == 1 ? 2 : 1;
-          var unselectedItem = document.getElementById(listItem.id.slice(0, -1) + itemNumber);
+          const itemNumber = listItem.id.slice(-1) === 1 ? 2 : 1;
+          const unselectedItem = document.getElementById(listItem.id.slice(0, -1) + itemNumber);
           classes = unselectedItem.getAttribute("class");
         }
 
         // grab classes from existing links / add them to our link for consistant style
-        let profileLink = document.createElement("button");
+        const profileLink = document.createElement("button");
         //profileLink.setAttribute("href", this.URL);
         profileLink.classList.add("ms-Button");
         profileLink.classList.add("ms-Button--action");
@@ -217,7 +221,7 @@ export default class ExtendLanguageApplicationCustomizer
         profileLink.setAttribute("class", classes);
 
         // List Group
-        let listGroup = document.createElement("div");
+        const listGroup = document.createElement("div");
         listGroup.setAttribute("role","group");
         listGroup.setAttribute("aria-labelledby", desktopId);
 
@@ -228,43 +232,43 @@ export default class ExtendLanguageApplicationCustomizer
       }
     }
 
-    public _addMobileMenuOptions() {
+    public _addMobileMenuOptions():void {
       const mobileId = "gcx-gce-langauge-extension-mobile-list";
 
-      let list = document.getElementsByClassName('ms-ContextualMenu-list');
-      let exists = document.getElementById(mobileId);
+      const list = document.getElementsByClassName('ms-ContextualMenu-list');
+      const exists = document.getElementById(mobileId);
 
       if(list && !exists) {
 
-        let listItem = document.createElement("li");
+        const listItem = document.createElement("li");
 
         listItem.setAttribute("role", "presentation");
         listItem.setAttribute("id", mobileId);
 
-        let accountList = document.createElement("ul");
+        const accountList = document.createElement("ul");
 
         accountList.className = styles.mobileList;
         accountList.id = "mobileLanguageExtension";
         accountList.setAttribute("role", "menu");
 
-        let listSeparator = document.createElement("li");
+        const listSeparator = document.createElement("li");
 
         listSeparator.className = styles.mobileSeparator;
         listSeparator.setAttribute("aria-hidden", "true");
 
-        let profileHeader = document.createElement("li");
+        const profileHeader = document.createElement("li");
 
         profileHeader.innerHTML = `<div class="ms-ContextualMenu-header ${styles.mobileProfileHeader}"><div class="ms-ContextualMenu-linkContent ${styles.mobileProfileHeaderItem}"><span class="ms-ContextualMenu-itemText ${styles.mobileProfileHeaderLabel}">${strings.header}</span></div></div>`;
         profileHeader.id = "mobileProfileHeader";
 
-        let profileLink = document.createElement("li");
+        const profileLink = document.createElement("li");
 
         profileLink.innerHTML = `<div class="ms-ContextualMenu-linkContent ${styles.mobileProfileLink}"><a href="` + this.URL + `"><span class="ms-ContextualMenu-itemText">${strings.link}</span></a></div>`;
         profileLink.setAttribute("aria-posinset", "1");
         profileLink.setAttribute("aria-setsize", "1");
         profileLink.setAttribute("aria-disabled", "false");
 
-        let divGroup = document.createElement("div");
+        const divGroup = document.createElement("div");
 
         divGroup.setAttribute("role", "group");
         divGroup.setAttribute("aria-labelledby", "mobileProfileHeader");
@@ -282,11 +286,11 @@ export default class ExtendLanguageApplicationCustomizer
       }
     }
 
-    public createURL(tenantId: string, userPrincipalName: string) {
+    public createURL(tenantId: string, userPrincipalName: string):void {
       this.URL = "https://myaccount.microsoft.com/settingsandprivacy/language/?ref=MeControl&login_hint=" + userPrincipalName + "&tid=" + tenantId;
     }
 
-    public _isMobile() {
+    public _isMobile():boolean {
       if(document.querySelector('[data-automation-id="LanguageSelector"]')) {
         return false;
       }
@@ -296,10 +300,10 @@ export default class ExtendLanguageApplicationCustomizer
       return null;
     }
 
-    public inSiteIds(id) {
-      let ids = this.properties.siteIds.split(',');
+    public inSiteIds(id:any):boolean {
+      const ids = this.properties.siteIds.split(',');
       for(let i = 0; i < ids.length; i++) {
-        if(id == ids[i].trim())
+        if(String(id) === ids[i].trim())
           return true;
       }
       return false;
