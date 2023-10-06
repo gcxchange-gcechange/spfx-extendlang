@@ -34,8 +34,8 @@ export default class Tour {
     this.addSteps();
   }
 
-  public startTour() {
-    let context = this;
+  public startTour():void {
+    const context = this;
 
     setTimeout(() => {
       if (!this.urlParamExists() || document.querySelector('.shepherd-content')) {
@@ -59,14 +59,14 @@ export default class Tour {
     }, this.tourDelay);
   }
 
-  public stopTour() {
+  public stopTour():void {
     if (this.tour) {
       this.tour.cancel();
     }
   }
 
-  private addSteps() {
-    let context = this;
+  private addSteps():void {
+    const context = this;
 
     // Step 1
     this.tour.addStep({
@@ -76,7 +76,7 @@ export default class Tour {
         : "Bienvenue dans GCéchange"),
       text: context.english === null ? strings.step1body 
       : (context.english 
-        ? "Welcome! Before we get started, let\'s make sure your language preferences are setup correctly." 
+        ? "Welcome! Before we get started, let's make sure your language preferences are setup correctly." 
         : "Bienvenue! Avant de commencer, assurez-vous que vos préférences linguistiques sont bien configurées."),
       attachTo: {
         element: this.target,
@@ -189,7 +189,7 @@ export default class Tour {
         : "Bonne visite!"),
       text: context.english === null ? strings.step3body 
       : (context.english 
-        ? "That\'s all for now! We hope you enjoy using GCXchange. Feel free to press the back button to go to any previous steps you may have skipped." 
+        ? "That's all for now! We hope you enjoy using GCXchange. Feel free to press the back button to go to any previous steps you may have skipped." 
         : "C’est tout pour le moment. Nous espérons que vous aimerez utiliser GCéchange. N’hésitez pas à utiliser le bouton de retour en arrière pour revenir aux étapes précédentes que vous avez peut-être sautées."),
       attachTo: {
         element: null, 
@@ -267,7 +267,7 @@ export default class Tour {
 
           dropdDown.id = 'gcx-tour-dropdown';
         
-          let actions = dropdDown.querySelectorAll('button, a');
+          const actions = dropdDown.querySelectorAll('button, a');
           actions.forEach(element => {
             (element as HTMLElement).style.pointerEvents = 'none';
           });
@@ -284,7 +284,7 @@ export default class Tour {
     }, this.stepDelay);
   }
 
-  private cleanupDropDown() {
+  private cleanupDropDown():void {
     if (this.dropDownCopy)
       this.dropDownCopy.remove();
 
@@ -292,9 +292,9 @@ export default class Tour {
       clearInterval(this.dropDownInterval);
   }
 
-  private hideAccessibility(selector: any) {
+  private hideAccessibility(selector: any):void {
     if (selector) {
-      let element: any = document.querySelector(selector);
+      const element: any = document.querySelector(selector);
       if (element) {
         element.ariaHidden = "true";
         element.tabIndex = -1;
@@ -302,23 +302,23 @@ export default class Tour {
     }
   }
 
-  private handleEndTour() {
-    let element: any = document.querySelector("div[class^='SPPage']");
+  private handleEndTour():void {
+    const element: any = document.querySelector("div[class^='SPPage']");
     if (element) {
       element.ariaHidden = "false";
       element.removeAttribute('tabIndex');
     }
   }
 
-  private urlParamExists() {
-    let param = window.location.href.split('gcxLangTour')[1];
+  private urlParamExists():boolean {
+    const param = window.location.href.split('gcxLangTour')[1];
     if (param) {
       return true;
     }
     return false;
   }
 
-  private isEnglish() {
+  private isEnglish():boolean {
     if(this.urlParamExists()) {
       if(window.location.href.indexOf('gcxLangTour=en') > -1) {
         return true;
@@ -330,10 +330,10 @@ export default class Tour {
     return null;
   }
 
-  private cleanseUrl() {
+  private cleanseUrl():void {
     if (this.urlParamExists()) {
 
-      let newUrl: string = window.location.href.replace('gcxLangTour&', '').replace('&gcxLangTour', '').replace('gcxLangTour', '');
+      const newUrl: string = window.location.href.replace('gcxLangTour&', '').replace('&gcxLangTour', '').replace('gcxLangTour', '');
       const newState: any = { additionalInformation: 'Updated the URL after the tour.' };
       const newTitle: string = "Home - Home";
 

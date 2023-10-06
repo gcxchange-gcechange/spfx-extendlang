@@ -14,6 +14,17 @@
       "termsOfUseUrl": "",
       "mpnId": ""
     },
+    "metadata": {
+      "shortDescription": {
+        "default": "spfx-extend-lang description"
+      },
+      "longDescription": {
+        "default": "spfx-extend-lang description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
     "features": [
       {
         "title": "Application Extension - Deployment of custom action.",
