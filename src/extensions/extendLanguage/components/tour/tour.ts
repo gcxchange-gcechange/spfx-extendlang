@@ -86,8 +86,7 @@ export default class Tour {
         {
           action() {
             if(!context.isMobile)
-            context.preCopyDropDown()
-            //context.copyDropDown();
+              context.disabledPointerEvents()
 
             return this.next();
           },
@@ -199,7 +198,7 @@ export default class Tour {
         {
           action() {
             if(!context.isMobile)
-              context.copyDropDown();
+              context.disabledPointerEvents();
 
             return this.back();
           },
@@ -218,70 +217,22 @@ export default class Tour {
       id: 'step4',
     });
   }
-  private preCopyDropDown():void {
+  private disabledPointerEvents():void {
+    this.target.click();
 
-      this.target.click();
+    this.dropDownInterval = setInterval(() => {
+      const dropdDown = document.querySelector('[gcx-set="true"]');
 
-      this.dropDownInterval = setInterval(() => {
-        const dropdDown = document.querySelector('.ms-Layer--fixed');
+      if(dropdDown) {
+      
+        const actions = dropdDown.querySelectorAll('[role="option"]');
+        actions.forEach(element => {
+          (element as HTMLElement).style.pointerEvents = 'none';
+        });
 
-        if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
-
-          dropdDown.id = 'gcx-tour-dropdown';
-        
-          const actions = dropdDown.querySelectorAll('button, a');
-          actions.forEach(element => {
-            (element as HTMLElement).style.pointerEvents = 'none';
-          });
-
-          this.dropDownCopy = dropdDown.cloneNode(true);
-
-          document.body.appendChild(this.dropDownCopy);
-          //this.dropdDown.remove();
-
-          clearInterval(this.dropDownInterval);
-        }
-      }, 10);
-        const element: any = document.querySelector("div[class^='dropdownItemsWrapper']");
-            if (element) {
-            element.setAttribute("aria-hidden", "true");
-            element.tabIndex = -1;
-             }
- }
-
-  private copyDropDown():any {
-    setTimeout(() => {
-
-      if(this.dropDownCopy) {
-        document.body.appendChild(this.dropDownCopy);
-        return;
+        clearInterval(this.dropDownInterval);
       }
-
-      else{
-      this.target.click();
-
-      this.dropDownInterval = setInterval(() => {
-        const dropdDown = document.querySelector('.ms-Layer--fixed');
-
-        if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
-
-          dropdDown.id = 'gcx-tour-dropdown';
-        
-          const actions = dropdDown.querySelectorAll('button, a');
-          actions.forEach(element => {
-            (element as HTMLElement).style.pointerEvents = 'none';
-          });
-
-          this.dropDownCopy = dropdDown.cloneNode(true);
-
-          document.body.appendChild(this.dropDownCopy);
-          //this.dropdDown.remove();
-
-          clearInterval(this.dropDownInterval);
-        }
-      }, 10);
-      }
-    }, this.stepDelay);
+    }, 10);
   }
 
   private cleanupDropDown():void {
@@ -311,11 +262,8 @@ export default class Tour {
   }
 
   private urlParamExists():boolean {
-    const param = window.location.href.split('gcxLangTour')[1];
-    if (param) {
-      return true;
-    }
-    return false;
+    const url = new URL(window.location.href);
+    return url.searchParams.has('gcxLangTour');
   }
 
   private isEnglish():boolean {
@@ -333,7 +281,10 @@ export default class Tour {
   private cleanseUrl():void {
     if (this.urlParamExists()) {
 
-      const newUrl: string = window.location.href.replace('gcxLangTour&', '').replace('&gcxLangTour', '').replace('gcxLangTour', '');
+      const url = new URL(window.location.href);
+      url.searchParams.delete('gcxLangTour');
+
+      const newUrl = url.toString();
       const newState: any = { additionalInformation: 'Updated the URL after the tour.' };
       const newTitle: string = "Home - Home";
 

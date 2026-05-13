@@ -188,19 +188,19 @@ export default class ExtendLanguageApplicationCustomizer
       });
     }
 
-    public _addDesktopMenuOptions(languageList: any, languageListItem: any, listItem: any): void {
+    public _addDesktopMenuOptions(dropDownMenu: any, languageListItem: any, listItem: any): void {
       const desktopId = "ProfileLangHeader";
 
       const exists = document.getElementById(desktopId);
       
-      if(!exists && languageList && languageListItem) {
+      if(!exists && dropDownMenu && languageListItem) {
         
         // Change dropdown hint header
         languageListItem.children[0].innerHTML = strings.PageHeader;
         languageListItem.children[0].className = styles.boldItem;
 
         // inform users of our new options we are adding
-        languageList.setAttribute("aria-live", "polite");
+        dropDownMenu.setAttribute("aria-live", "polite");
 
         // Dropdown heading
         const profileHeader = document.createElement("div");
@@ -257,7 +257,9 @@ export default class ExtendLanguageApplicationCustomizer
         testBtn.setAttribute("aria-label", strings.link);
 
         listGroup.append(testBtn);
-        languageList.append(listGroup);
+        dropDownMenu.append(listGroup);
+        
+        dropDownMenu.setAttribute("gcx-set", "true");
       }
     }
 
