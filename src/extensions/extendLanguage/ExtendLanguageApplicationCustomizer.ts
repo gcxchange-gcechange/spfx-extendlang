@@ -247,8 +247,16 @@ export default class ExtendLanguageApplicationCustomizer
         listGroup.setAttribute("aria-labelledby", desktopId);
 
         listGroup.append(profileHeader);
-        listGroup.append(profileLink);
 
+        const testBtn = document.createElement("div");
+        testBtn.innerText = strings.link;
+        testBtn.onclick = function() { location.href = context.URL };
+        testBtn.setAttribute("role", "option");
+        testBtn.setAttribute("itemtype", "0");
+        testBtn.setAttribute("class", classes);
+        testBtn.setAttribute("aria-label", strings.link);
+
+        listGroup.append(testBtn);
         languageList.append(listGroup);
       }
     }
