@@ -27,6 +27,11 @@ export default class ExtendLanguageApplicationCustomizer
     lastResize: number = Date.now();
     isMobile:any = null;
     URL: string = "https://myaccount.microsoft.com/settingsandprivacy/language";
+
+    private desktopMenuDiscoverInterval: number;
+    private mobileMenuDiscoverInterval: number;
+    private listLoadInterval: number;
+    private desktopListBtnInterval: number;
     
     @override
     protected async onInit(): Promise<void> {
@@ -41,7 +46,7 @@ export default class ExtendLanguageApplicationCustomizer
           const user = await sp.web.currentUser();
           this.createURL(this.context.pageContext.aadInfo.tenantId._guid, encodeURIComponent(user.UserPrincipalName));
         } catch (e) {
-          console.log("Error:",e)
+          console.log("Error:", e)
         }
         
         this._setupResizeEvents();
@@ -60,12 +65,12 @@ export default class ExtendLanguageApplicationCustomizer
         const desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
         const mobile = document.querySelector('[class^="moreActionsButton-"] button');
 
-        if(desktop) {
-          this.isMobile = false;
+        if (desktop) {
+          context.isMobile = false;
 
-          if(!this.tour) {
-            this.tour = new Tour((desktop as HTMLElement),  this.isMobile);
-            this.tour.startTour();
+          if (!context.tour) {
+            context.tour = new Tour((desktop as HTMLElement),  context.isMobile);
+            context.tour.startTour();
           }
 
           desktop.addEventListener('click', function() {
@@ -81,11 +86,11 @@ export default class ExtendLanguageApplicationCustomizer
           clearInterval(masterInterval);
         }
         else if(mobile) {
-          this.isMobile = true;
+          context.isMobile = true;
 
-          if(!this.tour) {
-            this.tour = new Tour((mobile as HTMLElement),  this.isMobile);
-            this.tour.startTour();
+          if(!context.tour) {
+            context.tour = new Tour((mobile as HTMLElement),  context.isMobile);
+            context.tour.startTour();
           }
 
           mobile.addEventListener('click', function() {
@@ -105,54 +110,64 @@ export default class ExtendLanguageApplicationCustomizer
 
     public _desktopClickFunc(context: any):void {
       const desktop = document.querySelector('[data-automation-id="LanguageSelector"]');
-      const menuDiscoverInterval = setInterval(() => {
 
-        const dropDown = document.getElementById(`${desktop.id}-list`);
+      if (desktop && !context.desktopMenuDiscoverInterval) {
+        context.desktopMenuDiscoverInterval = setInterval(() => {
+          const dropDown = document.querySelector('.fui-FluentProvider div[role="listbox"]');
 
-        if(dropDown) {
+          if (dropDown && !context.listLoadInterval) {
 
-          const listLoadInterval = setInterval(() => {
+            context.listLoadInterval = setInterval(() => {
+              const availLanguagesHeader = dropDown.querySelector('.ms-Dropdown-header');
 
-            const listItem = document.getElementById(`${desktop.id}hint`);
+              if (availLanguagesHeader && !context.desktopListBtnInterval) {
 
-            if(listItem) {
+                context.desktopListBtnInterval = setInterval(() => {
+                  const item1 = dropDown.querySelector('[role="option"]');
 
-              // Manually set focus on the first item in the list. 
-              // This fixes a strange bug in sharepoint where changing focus in this list via the arrow keys would automatically select items.
-              const item1 = document.getElementById(`${desktop.id}-list1`);
-              // if(item1) {
-              //   item1.focus();
-              // }
+                  if (item1) {
+                    (item1 as HTMLElement).focus();
+                    
+                    context._addDesktopMenuOptions(dropDown, availLanguagesHeader, item1);
 
-              context._addDesktopMenuOptions(dropDown, listItem, item1);
-              clearInterval(listLoadInterval);
-            }
+                    clearInterval(context.desktopListBtnInterval);
+                    context.desktopListBtnInterval = undefined;
 
-          }, 5); // Short interval because it's in the process of loading
+                    clearInterval(context.listLoadInterval);
+                    context.listLoadInterval = undefined;
+                  }
+                }, 5);
+              }
 
-          clearInterval(menuDiscoverInterval);
-        }
-      }, 5); // Short interval because it's in the process of loading
+            }, 5);
+            clearInterval(context.desktopMenuDiscoverInterval);
+            context.desktopMenuDiscoverInterval = undefined;
+          }
+        }, 5);
+      }
     }
 
     public _mobileClickFunc(context:any):void {
-      const menuDiscoverInterval = setInterval(() => {
+      if (context.mobileMenuDiscoverInterval)
+        return;
+
+      context.mobileMenuDiscoverInterval = setInterval(() => {
 
         const listLoad = document.querySelector('.ms-ContextualMenu-itemText');
 
-        if(listLoad) {
+        if (listLoad) {
 
           context._addMobileMenuOptions();
-          clearInterval(menuDiscoverInterval);
+          clearInterval(context.mobileMenuDiscoverInterval);
+          context.mobileMenuDiscoverInterval = undefined;
         }
-      }, 5); // Short interval because it's in the process of loading
+      }, 5);
     }
 
     // Track when page resizes so we know if the layout has switched from mobile to desktop or vice versa
     // If the layout has changed we need to rebind our events
-    public _setupResizeEvents():void {
+    public _setupResizeEvents(): void {
       const context = this;
-      console.log("Contest",context)
 
       window.addEventListener('resize', function() {
         const now = Date.now();
@@ -173,7 +188,7 @@ export default class ExtendLanguageApplicationCustomizer
       });
     }
 
-    public _addDesktopMenuOptions(languageList:any, languageListItem:any, listItem:any):void {
+    public _addDesktopMenuOptions(languageList: any, languageListItem: any, listItem: any): void {
       const desktopId = "ProfileLangHeader";
 
       const exists = document.getElementById(desktopId);
@@ -196,13 +211,19 @@ export default class ExtendLanguageApplicationCustomizer
         const context = this;
 
         let classes = "";
-        if (listItem.ariaSelected === "false") {
+        // TODO: Fix listItem, why are we doing this?
+        if (listItem) {
           classes = listItem.getAttribute("class");
-        } else {
-          const itemNumber = listItem.id.slice(-1) === 1 ? 2 : 1;
-          const unselectedItem = document.getElementById(listItem.id.slice(0, -1) + itemNumber);
-          classes = unselectedItem.getAttribute("class");
+
+          // if (listItem.ariaSelected === "false") {
+          //   classes = listItem.getAttribute("class");
+          // } else {
+          //   const itemNumber = listItem.id.slice(-1) === 1 ? 2 : 1;
+          //   const unselectedItem = document.getElementById(listItem.id.slice(0, -1) + itemNumber);
+          //   classes = unselectedItem.getAttribute("class");
+          // }
         }
+        
 
         // grab classes from existing links / add them to our link for consistant style
         const profileLink = document.createElement("button");
