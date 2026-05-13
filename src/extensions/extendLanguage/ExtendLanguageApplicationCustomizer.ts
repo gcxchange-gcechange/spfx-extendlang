@@ -123,12 +123,12 @@ export default class ExtendLanguageApplicationCustomizer
               if (availLanguagesHeader && !context.desktopListBtnInterval) {
 
                 context.desktopListBtnInterval = setInterval(() => {
-                  const item1 = dropDown.querySelector('[role="option"]');
+                  const firstOption = dropDown.querySelector('[role="option"]');
 
-                  if (item1) {
-                    (item1 as HTMLElement).focus();
+                  if (firstOption) {
+                    (firstOption as HTMLElement).focus();
                     
-                    context._addDesktopMenuOptions(dropDown, availLanguagesHeader, item1);
+                    context._addDesktopMenuOptions(dropDown, availLanguagesHeader, firstOption);
 
                     clearInterval(context.desktopListBtnInterval);
                     context.desktopListBtnInterval = undefined;
@@ -188,16 +188,16 @@ export default class ExtendLanguageApplicationCustomizer
       });
     }
 
-    public _addDesktopMenuOptions(dropDownMenu: any, languageListItem: any, listItem: any): void {
+    public _addDesktopMenuOptions(dropDownMenu: any, languagesHeader: any, listItem: any): void {
       const desktopId = "ProfileLangHeader";
 
       const exists = document.getElementById(desktopId);
       
-      if(!exists && dropDownMenu && languageListItem) {
+      if(!exists && dropDownMenu && languagesHeader) {
         
         // Change dropdown hint header
-        languageListItem.children[0].innerHTML = strings.PageHeader;
-        languageListItem.children[0].className = styles.boldItem;
+        languagesHeader.children[0].innerHTML = strings.PageHeader;
+        languagesHeader.children[0].className = styles.boldItem;
 
         // inform users of our new options we are adding
         dropDownMenu.setAttribute("aria-live", "polite");
@@ -209,37 +209,11 @@ export default class ExtendLanguageApplicationCustomizer
         profileHeader.id = desktopId;
 
         const context = this;
-
         let classes = "";
-        // TODO: Fix listItem, why are we doing this?
+
         if (listItem) {
           classes = listItem.getAttribute("class");
-
-          // if (listItem.ariaSelected === "false") {
-          //   classes = listItem.getAttribute("class");
-          // } else {
-          //   const itemNumber = listItem.id.slice(-1) === 1 ? 2 : 1;
-          //   const unselectedItem = document.getElementById(listItem.id.slice(0, -1) + itemNumber);
-          //   classes = unselectedItem.getAttribute("class");
-          // }
         }
-        
-
-        // grab classes from existing links / add them to our link for consistant style
-        const profileLink = document.createElement("button");
-        //profileLink.setAttribute("href", this.URL);
-        profileLink.classList.add("ms-Button");
-        profileLink.classList.add("ms-Button--action");
-        profileLink.classList.add("ms-Button--command");
-        profileLink.classList.add("ms-Dropdown-item");
-        profileLink.onclick = function() { location.href = context.URL };
-        profileLink.innerText = strings.link;
-        profileLink.className = styles.dropDownItem;
-        profileLink.setAttribute("data-index", "1");
-        profileLink.setAttribute("data-is-focusable", "true");
-        profileLink.setAttribute("aria-posinset", "1");
-        profileLink.setAttribute("aria-setsize", "1");
-        profileLink.setAttribute("class", classes);
 
         // List Group
         const listGroup = document.createElement("div");
