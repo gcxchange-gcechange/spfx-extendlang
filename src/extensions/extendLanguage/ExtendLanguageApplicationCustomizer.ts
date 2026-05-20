@@ -22,16 +22,16 @@ export interface IExtendLanguageApplicationCustomizerProperties {
 export default class ExtendLanguageApplicationCustomizer
   extends BaseApplicationCustomizer<IExtendLanguageApplicationCustomizerProperties> {
 
-    tour: Tour = null;
+    tour: Tour | undefined = undefined;
     debounceTimeout: number = 200;
     lastResize: number = Date.now();
     isMobile:any = null;
     URL: string = "https://myaccount.microsoft.com/settingsandprivacy/language";
 
-    private desktopMenuDiscoverInterval: number;
-    private mobileMenuDiscoverInterval: number;
-    private listLoadInterval: number;
-    private desktopListBtnInterval: number;
+    private desktopMenuDiscoverInterval: number | null = null;
+    private mobileMenuDiscoverInterval: number | null = null;
+    private listLoadInterval: number | null = null;
+    private desktopListBtnInterval: number | null = null;
     
     @override
     protected async onInit(): Promise<void> {
@@ -44,7 +44,7 @@ export default class ExtendLanguageApplicationCustomizer
         try {
           const sp = await spfi().using(SPFx(this.context));
           const user = await sp.web.currentUser();
-          this.createURL(this.context.pageContext.aadInfo.tenantId._guid, encodeURIComponent(user.UserPrincipalName));
+          this.createURL(this.context.pageContext.aadInfo.tenantId._guid, encodeURIComponent(user.UserPrincipalName as string));
         } catch (e) {
           console.log("Error:", e)
         }
@@ -77,8 +77,9 @@ export default class ExtendLanguageApplicationCustomizer
             context._desktopClickFunc(context);
           });
 
-          desktop.addEventListener('keydown', function(e: KeyboardEvent) {
-            if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === "Space") {
+          desktop.addEventListener('keydown', function(e: Event) {
+            const ke = e as KeyboardEvent;
+            if (ke.code === 'Enter' || ke.code === 'NumpadEnter' || ke.code === "Space") {
               context._desktopClickFunc(context);
             }
           });
@@ -97,8 +98,9 @@ export default class ExtendLanguageApplicationCustomizer
             context._mobileClickFunc(context);
           });
 
-          mobile.addEventListener('keydown', function(e: KeyboardEvent) {
-            if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === "Space"){
+          mobile.addEventListener('keydown', function(e: Event) {
+            const ke = e as KeyboardEvent;
+            if (ke.code === 'Enter' || ke.code === 'NumpadEnter' || ke.code === "Space"){
               context._mobileClickFunc(context);
             }
           });
@@ -295,14 +297,14 @@ export default class ExtendLanguageApplicationCustomizer
       this.URL = "https://myaccount.microsoft.com/settingsandprivacy/language/?ref=MeControl&login_hint=" + userPrincipalName + "&tid=" + tenantId;
     }
 
-    public _isMobile():boolean {
+    public _isMobile():boolean | undefined {
       if(document.querySelector('[data-automation-id="LanguageSelector"]')) {
         return false;
       }
       else if(document.querySelector('[class^="moreActionsButton-"]')) {
         return true;
       }
-      return null;
+      return undefined;
     }
 
     public inSiteIds(id:any):boolean {
