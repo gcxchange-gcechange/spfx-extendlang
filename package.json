@@ -8,6 +8,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "heft build --clean",
+    "ship": "heft build --clean --production && heft package-solution --production",
     "clean": "heft clean",
     "test": "heft test",
     "start": "heft start --clean",
