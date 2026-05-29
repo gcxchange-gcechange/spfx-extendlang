@@ -3,15 +3,15 @@ import * as strings from 'ExtendLanguageApplicationCustomizerStrings';
 
 export default class Tour {
 
-  private tour: Shepherd.Tour = null;
-  private target: HTMLElement = null;
-  private profile: HTMLElement = null;
+  private tour: Shepherd.Tour | null = null;
+  private target: HTMLElement | null = null;
+  private profile: HTMLElement | null = null;
   private dropDownInterval: any = null;
   private dropDownCopy: any = null;
   private stepDelay: number = 500;
   private tourDelay: number = 1000;
-  private isMobile: boolean = null;
-  private english: boolean = null;
+  private isMobile: boolean | null = null;
+  private english: boolean | null = null;
 
   constructor(target: HTMLElement, isMobile: boolean, tourDelay: number = 1000) {
     this.target = target;
@@ -42,16 +42,16 @@ export default class Tour {
         return;
       }
 
-      this.tour.start();
+      this.tour?.start();
       this.cleanseUrl();
       this.hideAccessibility("div[class^='SPPage']");
 
-      this.tour.on("cancel", () => {
+      this.tour?.on("cancel", () => {
         context.handleEndTour();
         context.cleanupDropDown();
       });
       
-      this.tour.on("complete", () => {
+      this.tour?.on("complete", () => {
         context.handleEndTour();
         context.cleanupDropDown();
       });
@@ -69,7 +69,7 @@ export default class Tour {
     const context = this;
 
     // Step 1
-    this.tour.addStep({
+    this.tour?.addStep({
       title: context.english === null ? strings.step1header 
       : (context.english 
         ? "Welcome to GCXchange" 
@@ -79,15 +79,14 @@ export default class Tour {
         ? "Welcome! Before we get started, let's make sure your language preferences are setup correctly." 
         : "Bienvenue! Avant de commencer, assurez-vous que vos préférences linguistiques sont bien configurées."),
       attachTo: {
-        element: this.target,
+        element: this.target as HTMLElement,
         on: this.isMobile? 'bottom' : 'left'
       },
       buttons: [
         {
           action() {
             if(!context.isMobile)
-            context.preCopyDropDown()
-            //context.copyDropDown();
+              context.disabledPointerEvents()
 
             return this.next();
           },
@@ -104,7 +103,7 @@ export default class Tour {
     });
     //https://devgcx.sharepoint.com/?gcxLangTour=en&=en&=en&debugManifestsFile=https%3A%2F%2Flocalhost%3A4321%2Ftemp%2Fmanifests.js&loadSPFX=true&customActions=%7B%222b0319cf-2fb2-4615-98dc-5aeda318c13a%22%3A%7B%22location%22%3A%22ClientSideExtension.ApplicationCustomizer%22%2C%22properties%22%3A%7B%22testMessage%22%3A%22Test+message%22%7D%7D%7D
       // STEP 2
-    this.tour.addStep({
+    this.tour?.addStep({
       title: context.english === null ? strings.step2header 
       : (context.english 
         ? "Language Settings" 
@@ -114,7 +113,7 @@ export default class Tour {
         ? "To change the <b>page language</b>, pick English or French. The language of headings and menus in GCXchange can only be changed in your MS365 Account's <b>language & region</b> settings. For more information, visit our <a href=\"https://gcxchange.sharepoint.com/sites/Support/SitePages/FAQ.aspx\">FAQ<a/>" 
         : "Pour changer la <b>langue de la page</b>, choisissez « anglais » ou « français ». La langue des en têtes et des menus dans GCéchange ne peut être modifiée que dans les paramètres de <b>langue et de région</b> de votre compte MS365. Pour en savoir plus, consultez notre <a href=\"https://gcxchange.sharepoint.com/sites/Support/SitePages/fr/FAQ.aspx\">FAQ</a>."),
       attachTo: {
-        element: this.target,
+        element: this.target as HTMLElement,
         on: this.isMobile? 'bottom' : 'left'
       },
       buttons: [
@@ -130,7 +129,7 @@ export default class Tour {
         {
           action() {
             context.cleanupDropDown();
-            context.tour.next();
+            context.tour?.next();
           },
           text: context.english === null ? strings.next : (context.english ? "Next" : "Suivant"),
           label: context.english === null ? strings.next : (context.english ? "Next" : "Suivant")
@@ -182,7 +181,7 @@ export default class Tour {
     //});
 
      // STEP 3
-     this.tour.addStep({
+     this.tour?.addStep({
       title: context.english === null ? strings.step3header 
       : (context.english 
         ? "Enjoy!" 
@@ -192,14 +191,14 @@ export default class Tour {
         ? "That's all for now! We hope you enjoy using GCXchange. Feel free to press the back button to go to any previous steps you may have skipped." 
         : "C’est tout pour le moment. Nous espérons que vous aimerez utiliser GCéchange. N’hésitez pas à utiliser le bouton de retour en arrière pour revenir aux étapes précédentes que vous avez peut-être sautées."),
       attachTo: {
-        element: null, 
+        element: undefined, 
         on: this.isMobile? 'bottom' : 'left'
       },
       buttons: [
         {
           action() {
             if(!context.isMobile)
-              context.copyDropDown();
+              context.disabledPointerEvents();
 
             return this.back();
           },
@@ -209,7 +208,7 @@ export default class Tour {
         },
         {
           action() {
-            return context.tour.complete();
+            return context.tour?.complete();
           },
           text: context.english === null ? strings.done : (context.english ? "Done" : "Sortir"),
           label: context.english === null ? strings.done : (context.english ? "Done" : "Sortir")
@@ -218,70 +217,22 @@ export default class Tour {
       id: 'step4',
     });
   }
-  private preCopyDropDown():void {
+  private disabledPointerEvents():void {
+    this.target?.click();
 
-      this.target.click();
+    this.dropDownInterval = setInterval(() => {
+      const dropdDown = document.querySelector('[gcx-set="true"]');
 
-      this.dropDownInterval = setInterval(() => {
-        const dropdDown = document.querySelector('.ms-Layer--fixed');
+      if(dropdDown) {
+      
+        const actions = dropdDown.querySelectorAll('[role="option"]');
+        actions.forEach(element => {
+          (element as HTMLElement).style.pointerEvents = 'none';
+        });
 
-        if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
-
-          dropdDown.id = 'gcx-tour-dropdown';
-        
-          const actions = dropdDown.querySelectorAll('button, a');
-          actions.forEach(element => {
-            (element as HTMLElement).style.pointerEvents = 'none';
-          });
-
-          this.dropDownCopy = dropdDown.cloneNode(true);
-
-          document.body.appendChild(this.dropDownCopy);
-          //this.dropdDown.remove();
-
-          clearInterval(this.dropDownInterval);
-        }
-      }, 10);
-        const element: any = document.querySelector("div[class^='dropdownItemsWrapper']");
-            if (element) {
-            element.setAttribute("aria-hidden", "true");
-            element.tabIndex = -1;
-             }
- }
-
-  private copyDropDown():any {
-    setTimeout(() => {
-
-      if(this.dropDownCopy) {
-        document.body.appendChild(this.dropDownCopy);
-        return;
+        clearInterval(this.dropDownInterval);
       }
-
-      else{
-      this.target.click();
-
-      this.dropDownInterval = setInterval(() => {
-        const dropdDown = document.querySelector('.ms-Layer--fixed');
-
-        if(dropdDown && dropdDown.querySelector('#ProfileLangHeader')) {
-
-          dropdDown.id = 'gcx-tour-dropdown';
-        
-          const actions = dropdDown.querySelectorAll('button, a');
-          actions.forEach(element => {
-            (element as HTMLElement).style.pointerEvents = 'none';
-          });
-
-          this.dropDownCopy = dropdDown.cloneNode(true);
-
-          document.body.appendChild(this.dropDownCopy);
-          //this.dropdDown.remove();
-
-          clearInterval(this.dropDownInterval);
-        }
-      }, 10);
-      }
-    }, this.stepDelay);
+    }, 10);
   }
 
   private cleanupDropDown():void {
@@ -311,14 +262,11 @@ export default class Tour {
   }
 
   private urlParamExists():boolean {
-    const param = window.location.href.split('gcxLangTour')[1];
-    if (param) {
-      return true;
-    }
-    return false;
+    const url = new URL(window.location.href);
+    return url.searchParams.has('gcxLangTour');
   }
 
-  private isEnglish():boolean {
+  private isEnglish():boolean | null {
     if(this.urlParamExists()) {
       if(window.location.href.indexOf('gcxLangTour=en') > -1) {
         return true;
@@ -333,7 +281,10 @@ export default class Tour {
   private cleanseUrl():void {
     if (this.urlParamExists()) {
 
-      const newUrl: string = window.location.href.replace('gcxLangTour&', '').replace('&gcxLangTour', '').replace('gcxLangTour', '');
+      const url = new URL(window.location.href);
+      url.searchParams.delete('gcxLangTour');
+
+      const newUrl = url.toString();
       const newState: any = { additionalInformation: 'Updated the URL after the tour.' };
       const newTitle: string = "Home - Home";
 

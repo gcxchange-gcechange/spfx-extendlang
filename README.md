@@ -20,8 +20,8 @@ None
 ## API permission
 Microsoft Graph - User.ReadBasic.All
 ## Version 
-![SPFX](https://img.shields.io/badge/SPFX-1.17.4-green.svg)
-![Node.js](https://img.shields.io/badge/Node.js-v16.3+-green.svg)
+![SPFX](https://img.shields.io/badge/SPFX-1.22.1-green.svg)
+![Node.js](https://img.shields.io/badge/Node.js-v22.22.1+-green.svg)
 
 ## Applies to
 
@@ -37,6 +37,7 @@ Version|Date|Comments
 1.0|Sept 24, 2021|Initial release
 1.0.1  | Jun 29, 2022 | Siteids added as extension property
 1.0.2  | Sept 23, 2023 | Upgraded to SPFX 1.17.4
+1.0.3  | May 20, 2026 | Upgraded to SPFX 1.22.1
 
 ## Minimal Path to Awesome
 - Clone this repository
@@ -46,14 +47,12 @@ Version|Date|Comments
     - **npm install**
 - To debug
   - go to the `spfx-extendlang\config\serve.json` file and update `pageUrl` to any url of hubsite
+  - to trigger the tour make sure `gcxLangTour=en` or `gcxLangTour=fr` is in the URL
   - **in the command-line run:**
-    - **gulp clean**
-    - **gulp serve**
+    - **npm run start**
 - To deploy: 
   - **in the command-line run:**
-    - **gulp clean**
-    - **gulp bundle --ship**
-    - **gulp package-solution --ship**
+    - **npm run ship**
 
 - Upload the extension from `\sharepoint\solution` to your tenant app store
 - To add or modify extension property called siteIds

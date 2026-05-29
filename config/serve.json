@@ -4,7 +4,7 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://devgcx.sharepoint.com/",
+      "pageUrl": "https://devgcx.sharepoint.com/?gcxLangTour=en",
       "customActions": {
         "2b0319cf-2fb2-4615-98dc-5aeda318c13a": {
           "location": "ClientSideExtension.ApplicationCustomizer",
